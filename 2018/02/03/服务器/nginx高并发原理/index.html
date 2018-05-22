@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>nginx高并发原理 | Zfd&#39;s blog.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    
+    <meta name="keywords" content="nginx,server,epoll">
+    <meta name="description" content="Nginx 采用的是多进程 &amp;amp;&amp;amp; 多路IO复用模型。 多进程的工作模式 Nginx启动后，会有一个master进程和多个项目独立的worker进程。 master进程接收来自外界信号，然后向worker进程发送，每个进程都有可能处理这个连接。 master进程监控worker进程运行状态，worker进程异常退出时，启动新的进程。  注：worker进程数一般为cpu核数，因为更多">
+<meta name="keywords" content="nginx,server,epoll">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nginx高并发原理">
+<meta property="og:url" content="https://zfd.github.io/2018/02/03/服务器/nginx高并发原理/index.html">
+<meta property="og:site_name" content="Zfd&#39;s blog.">
+<meta property="og:description" content="Nginx 采用的是多进程 &amp;amp;&amp;amp; 多路IO复用模型。 多进程的工作模式 Nginx启动后，会有一个master进程和多个项目独立的worker进程。 master进程接收来自外界信号，然后向worker进程发送，每个进程都有可能处理这个连接。 master进程监控worker进程运行状态，worker进程异常退出时，启动新的进程。  注：worker进程数一般为cpu核数，因为更多">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-22T09:48:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nginx高并发原理">
+<meta name="twitter:description" content="Nginx 采用的是多进程 &amp;amp;&amp;amp; 多路IO复用模型。 多进程的工作模式 Nginx启动后，会有一个master进程和多个项目独立的worker进程。 master进程接收来自外界信号，然后向worker进程发送，每个进程都有可能处理这个连接。 master进程监控worker进程运行状态，worker进程异常退出时，启动新的进程。  注：worker进程数一般为cpu核数，因为更多">
+    
+        <link rel="alternate" type="application/atom+xml" title="Zfd&#39;s blog." href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/icon_trans.png">
+    <link rel="stylesheet" href="/css/style.css?v=1.7.2">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/icon.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zfd</h5>
+          <a href="mailto:zf.dong@qq.com" title="zf.dong@qq.com" class="mail">zf.dong@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                首页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zfd" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">nginx高并发原理</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <!-- todo hide -->
+        <a href="javascript:;" style="display:none;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">nginx高并发原理</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-02-03T15:11:53.000Z" itemprop="datePublished" class="page-time">
+  2018-02-03
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/服务器/">服务器</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>目录</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#多进程的工作模式"><span class="post-toc-number">1.</span> <span class="post-toc-text">多进程的工作模式</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#惊群现象-amp-amp-解决方法"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">惊群现象 &amp;&amp; 解决方法</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#worker进程工作流程"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">worker进程工作流程</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#多路IO复用模型epoll"><span class="post-toc-number">2.</span> <span class="post-toc-text">多路IO复用模型epoll</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-服务器/nginx高并发原理"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">nginx高并发原理</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-02-03 15:11:53" datetime="2018-02-03T15:11:53.000Z"  itemprop="datePublished">2018-02-03</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/服务器/">服务器</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>Nginx 采用的是多进程 &amp;&amp; 多路IO复用模型。</p>
+<h2 id="多进程的工作模式"><a href="#多进程的工作模式" class="headerlink" title="多进程的工作模式"></a>多进程的工作模式</h2><ul>
+<li>Nginx启动后，会有一个master进程和多个项目独立的worker进程。</li>
+<li>master进程接收来自外界信号，然后向worker进程发送，每个进程都有可能处理这个连接。</li>
+<li>master进程监控worker进程运行状态，worker进程异常退出时，启动新的进程。</li>
+</ul>
+<p>注：worker进程数一般为cpu核数，因为更多的worker进程数会导致相互竞争cpu，从而带来不必要的上下文切换。</p>
+<h3 id="惊群现象-amp-amp-解决方法"><a href="#惊群现象-amp-amp-解决方法" class="headerlink" title="惊群现象 &amp;&amp; 解决方法"></a>惊群现象 &amp;&amp; 解决方法</h3><p>现象：<br>master进程创建一个sockfd（socket文件描述符），然后fork子进程，子进程继承父进程的sockfd，之后子进程accept后再创建已连接描述符，最后与客户端通信。<br>由于，所有子进程都继承父进程的sockfd，当客户端连接进来时，所有子进程都会收到通知并抢着与他建立连接，这就叫<code>惊群现象</code>。<br>大量的进程被激活又挂起，只有一个进程可以accept这个连接，当然会消耗系统资源。</p>
+<p>处理：<br>nginx提供一个accept_mutex，这是一个加在accept上的一把互斥锁。<br>同一时刻只有一个子进程去accept，这里就不会有惊群问题了。</p>
+<h3 id="worker进程工作流程"><a href="#worker进程工作流程" class="headerlink" title="worker进程工作流程"></a>worker进程工作流程</h3><p>accept客户端的连接-&gt;读取请求-&gt;解析请求-&gt;处理请求-&gt;返回结果给客户端-&gt;断开连接。</p>
+<p>一个请求，完全由一个worker进程处理，好处：</p>
+<ul>
+<li>节省锁带来的开销；每个worker进程都是独立的进程，不共享资源，不需要加锁。</li>
+<li>独立进程，减少风险，进程之间相互不会影响。</li>
+</ul>
+<h2 id="多路IO复用模型epoll"><a href="#多路IO复用模型epoll" class="headerlink" title="多路IO复用模型epoll"></a>多路IO复用模型epoll</h2><p>epoll通过在linux内核中申请一个简易的文件系统（数据结构：B+树），工作原理：</p>
+<ol>
+<li>调用 <code>int epoll_create(int size)</code> 建立一个epoll对象，内核会创建一个eventpoll结构体，用于存放通过epoll_ctl()向epoll对象中添加进来的事件，这些事件都会挂载在红黑树中。</li>
+<li>调用 <code>int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event)</code> 在 epoll 对象中为 fd 注册事件，所有添加到epoll中的事件都会与设备驱动程序建立回调关系，也就是说，当相应的事件发生时会调用这个sockfd的回调方法，将sockfd添加到eventpoll 中的双链表。</li>
+<li>调用 <code>int epoll_wait(int epfd, struct epoll_event * events, int maxevents, int timeout)</code> 来等待事件的发生，timeout 为 -1 时，该调用会阻塞知道有事件发生</li>
+</ol>
+
+        </div>
+
+        
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/epoll/">epoll</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nginx/">nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/server/">server</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/02/03/服务器/nginx高并发原理/&title=《nginx高并发原理》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/02/03/服务器/nginx高并发原理/&title=《nginx高并发原理》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/02/03/服务器/nginx高并发原理/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《nginx高并发原理》 — Zfd's blog.&url=https://zfd.github.io/2018/02/03/服务器/nginx高并发原理/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/02/03/服务器/nginx高并发原理/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/02/04/服务器/代理/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">代理</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/01/30/日常/搭建博客/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">搭建博客</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <!-- todo hide
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    -->
+    <div class="bottom">
+        <p><span>zfd &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/02/03/服务器/nginx高并发原理/&title=《nginx高并发原理》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/02/03/服务器/nginx高并发原理/&title=《nginx高并发原理》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/02/03/服务器/nginx高并发原理/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《nginx高并发原理》 — Zfd's blog.&url=https://zfd.github.io/2018/02/03/服务器/nginx高并发原理/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/02/03/服务器/nginx高并发原理/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACtUlEQVR42u3aQW4jMQwEwPz/0w6wt0XgQbdIZQ1s6WR4JjJLB0kh+fUVj9efkX9+nuH5nXdvJjMcDjw8PLyj0N+NhPHzaTLDMyZZ4ueY8fDw8G7z8sPgeWkmMyfLkc+Mh4eH9wm8/MqbHA/5DO1y4+Hh4X0OL0kfnCHffYOHh4f3ybwkGTEJPb9w55fv5VwLHh4eXsy7UQC7/fkf1/fw8PD+Y97raORHxfMhMUnmRnHi4eHhXeAlrU7tDpyHkqcezt7Ew8PDu8FLClrtNn0W3Fbi46/v8fDw8K7xtgr5eWNB3nAwKozh4eHhXeZNrrmTy3HbslD8A4CHh4d3mXfWAtWW7fPQJ9duPDw8vHu8s6tzvg/nLVn5ft6W1vDw8PB2efn2OgmiDXfy63XOGA8PD2+JNynnF5fdMrb6KMLDw8O7xktgyQadz3CWDs5jwMPDw7vHa0v47RV5a4Y8yYuHh4f3O7y2HapN3ebLl7zZJjLw8PDwdnntHyQbeps4yJOzbeoEDw8P7x5v62DIt/u86SpP/katA3h4eHhj3jw5mxwtW4na9gqOh4eHd4OXJ1u3LrvtUibHVXSlxsPDw1viJYmD5GeSxdoqrc1btfDw8PC2eG0CNw8rP1rypEO+oHh4eHi3eXmyIH+azDxpLCgOBjw8PLxVXv6vfptoaMF54S0/ePDw8PB2eXn6ILkEt00GSdCjqPDw8PCu8doEQV7yb/fqSXqieIyHh4d3xHuVoy355+ndyfX9bWx4eHh4F3j5aHl5K0Ae6EK7FR4eHt4SL2+WOvvJduazRYl6IvDw8PBWefOWqbN5zlIhRWoDDw8P7wN48+07B+SHwdrBgIeHh7fKy6/IZ0/zgyT/Hg8PD+8er229OmuNOitujYpeeHh4eL9YT28LYHkok5asK1U+PDw8vJT3DRgjkpfwRj1AAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.7.2"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.7.2" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

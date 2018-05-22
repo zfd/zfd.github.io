@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>简单排序算法 | Zfd&#39;s blog.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    
+    <meta name="keywords" content="php,sort">
+    <meta name="description" content="算法总结 时间复杂度：一个算法执行所耗费的时间。空间复杂度：运行完一个程序所需内存的大小。     排序算法 平均时间复杂度 平均空间复杂度     冒泡排序 O(n2) O(1)   选择排序 O(n2) O(1)   插入排序 O(n2) O(1)   希尔排序 O(nlog2n) O(1)   归并排序 O(nlog2n) O(n)   快速排序 O(nlog2n) O(log2n)   堆">
+<meta name="keywords" content="php,sort">
+<meta property="og:type" content="article">
+<meta property="og:title" content="简单排序算法">
+<meta property="og:url" content="https://zfd.github.io/2018/03/23/算法/简单排序算法/index.html">
+<meta property="og:site_name" content="Zfd&#39;s blog.">
+<meta property="og:description" content="算法总结 时间复杂度：一个算法执行所耗费的时间。空间复杂度：运行完一个程序所需内存的大小。     排序算法 平均时间复杂度 平均空间复杂度     冒泡排序 O(n2) O(1)   选择排序 O(n2) O(1)   插入排序 O(n2) O(1)   希尔排序 O(nlog2n) O(1)   归并排序 O(nlog2n) O(n)   快速排序 O(nlog2n) O(log2n)   堆">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-22T09:48:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="简单排序算法">
+<meta name="twitter:description" content="算法总结 时间复杂度：一个算法执行所耗费的时间。空间复杂度：运行完一个程序所需内存的大小。     排序算法 平均时间复杂度 平均空间复杂度     冒泡排序 O(n2) O(1)   选择排序 O(n2) O(1)   插入排序 O(n2) O(1)   希尔排序 O(nlog2n) O(1)   归并排序 O(nlog2n) O(n)   快速排序 O(nlog2n) O(log2n)   堆">
+    
+        <link rel="alternate" type="application/atom+xml" title="Zfd&#39;s blog." href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/icon_trans.png">
+    <link rel="stylesheet" href="/css/style.css?v=1.7.2">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/icon.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zfd</h5>
+          <a href="mailto:zf.dong@qq.com" title="zf.dong@qq.com" class="mail">zf.dong@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                首页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zfd" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">简单排序算法</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <!-- todo hide -->
+        <a href="javascript:;" style="display:none;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">简单排序算法</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-03-22T17:45:08.000Z" itemprop="datePublished" class="page-time">
+  2018-03-22
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/算法/">算法</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>目录</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#算法总结"><span class="post-toc-number">1.</span> <span class="post-toc-text">算法总结</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#冒泡排序（Bubble-Sort）"><span class="post-toc-number">2.</span> <span class="post-toc-text">冒泡排序（Bubble Sort）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#算法描述"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">算法描述</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#代码实现"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">代码实现</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#选择排序（Selection-Sort）"><span class="post-toc-number">3.</span> <span class="post-toc-text">选择排序（Selection Sort）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#算法描述-1"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">算法描述</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#代码实现-1"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">代码实现</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#插入排序（Insertion-Sort）"><span class="post-toc-number">4.</span> <span class="post-toc-text">插入排序（Insertion Sort）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#算法描述-2"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">算法描述</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#代码实现-2"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">代码实现</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#快速排序（Quick-Sort）"><span class="post-toc-number">5.</span> <span class="post-toc-text">快速排序（Quick Sort）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#算法描述-3"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">算法描述</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#代码实现-3"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">代码实现</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#堆排序（Heap-Sort）"><span class="post-toc-number">6.</span> <span class="post-toc-text">堆排序（Heap Sort）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#算法描述-4"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">算法描述</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#代码实现-4"><span class="post-toc-number">6.2.</span> <span class="post-toc-text">代码实现</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#桶排序（Bucket-Sort）"><span class="post-toc-number">7.</span> <span class="post-toc-text">桶排序（Bucket Sort）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#算法描述-5"><span class="post-toc-number">7.1.</span> <span class="post-toc-text">算法描述</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#代码实现-5"><span class="post-toc-number">7.2.</span> <span class="post-toc-text">代码实现</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-算法/简单排序算法"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">简单排序算法</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-03-22 17:45:08" datetime="2018-03-22T17:45:08.000Z"  itemprop="datePublished">2018-03-22</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/算法/">算法</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="算法总结"><a href="#算法总结" class="headerlink" title="算法总结"></a>算法总结</h2><blockquote>
+<p>时间复杂度：一个算法执行所耗费的时间。<br>空间复杂度：运行完一个程序所需内存的大小。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>排序算法</th>
+<th>平均时间复杂度</th>
+<th>平均空间复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>冒泡排序</td>
+<td>O(n<sup>2</sup>)</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>选择排序</td>
+<td>O(n<sup>2</sup>)</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>插入排序</td>
+<td>O(n<sup>2</sup>)</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>希尔排序</td>
+<td>O(nlog<sub>2</sub>n)</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>归并排序</td>
+<td>O(nlog<sub>2</sub>n)</td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td>快速排序</td>
+<td>O(nlog<sub>2</sub>n)</td>
+<td>O(log<sub>2</sub>n)</td>
+</tr>
+<tr>
+<td>堆排序</td>
+<td>O(nlog<sub>2</sub>n)</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>桶排序</td>
+<td>O(n+k)</td>
+<td>O(n+k)</td>
+</tr>
+</tbody>
+</table>
+<p>下面排序，1～n个元素，默认从小到大排列。</p>
+<h2 id="冒泡排序（Bubble-Sort）"><a href="#冒泡排序（Bubble-Sort）" class="headerlink" title="冒泡排序（Bubble Sort）"></a>冒泡排序（Bubble Sort）</h2><h3 id="算法描述"><a href="#算法描述" class="headerlink" title="算法描述"></a>算法描述</h3><ol>
+<li>比较第1个、第2个元素，如果第1个比较大，则交换2个元素的位置；</li>
+<li>比较第2个、第3个元素，3、4，4、5，以此类推，最后得到第n个元素为最大值；</li>
+<li>对1～n－1的剩余元素，重复1、2步骤的操作，以此类推，每一次循环后，最大的元素在右边，直到排序完成。</li>
+</ol>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">swap</span><span class="params">(&amp;$arr, $intI, $intJ)</span> </span>&#123;</span><br><span class="line">    $intTmp = $arr[$intI];</span><br><span class="line">    $arr[$intI] = $arr[$intJ];</span><br><span class="line">    $arr[$intJ] = $intTmp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bubbleSort</span><span class="params">($arr)</span> </span>&#123;</span><br><span class="line">    $intN = count($arr);</span><br><span class="line">    <span class="keyword">for</span> ($intI = <span class="number">0</span>; $intI &lt; $intN; $intI++) &#123;</span><br><span class="line">        <span class="keyword">for</span> ($intJ = <span class="number">0</span>; $intJ &lt; $intN - $intI - <span class="number">1</span>; $intJ++) &#123;</span><br><span class="line">            <span class="keyword">if</span> ($arr[$intJ] &gt; $arr[$intJ + <span class="number">1</span>]) &#123;</span><br><span class="line">                swap($arr, $intJ, $intJ + <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> $arr;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$arr = <span class="keyword">array</span>(<span class="number">2</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">3</span>);</span><br><span class="line">$arr = bubbleSort($arr);</span><br><span class="line">var_export($arr);</span><br></pre></td></tr></table></figure>
+<h2 id="选择排序（Selection-Sort）"><a href="#选择排序（Selection-Sort）" class="headerlink" title="选择排序（Selection Sort）"></a>选择排序（Selection Sort）</h2><h3 id="算法描述-1"><a href="#算法描述-1" class="headerlink" title="算法描述"></a>算法描述</h3><ol>
+<li>从1～n里面，取第1个元素依次去跟其它元素比较；</li>
+<li>如果遇到比他大的，则记录较大的元素下标i，用元素i继续去比较；</li>
+<li>最后把i跟n交换位置，第n个元素为最大值；</li>
+<li>从1～n－1里面，重复步骤1～3的操作，直到排序完成。</li>
+</ol>
+<h3 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">swap</span><span class="params">(&amp;$arr, $intI, $intJ)</span> </span>&#123;</span><br><span class="line">    $intTmp = $arr[$intI];</span><br><span class="line">    $arr[$intI] = $arr[$intJ];</span><br><span class="line">    $arr[$intJ] = $intTmp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">selectionSort</span><span class="params">($arr)</span> </span>&#123;</span><br><span class="line">    $intN = count($arr);</span><br><span class="line">    <span class="keyword">for</span> ($intI = <span class="number">0</span>; $intI &lt; $intN; $intI++) &#123;</span><br><span class="line">        $intM = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> ($intJ = <span class="number">0</span>; $intJ &lt; $intN - $intI - <span class="number">1</span>; $intJ++) &#123;</span><br><span class="line">            <span class="keyword">if</span> ($arr[$intM] &lt; $arr[$intJ + <span class="number">1</span>]) &#123;</span><br><span class="line">                $intM = $intJ + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        swap($arr, $intM, $intJ);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> $arr;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$arr = <span class="keyword">array</span>(<span class="number">2</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">3</span>);</span><br><span class="line">$arr = selectionSort($arr);</span><br><span class="line">var_export($arr);</span><br></pre></td></tr></table></figure>
+<h2 id="插入排序（Insertion-Sort）"><a href="#插入排序（Insertion-Sort）" class="headerlink" title="插入排序（Insertion Sort）"></a>插入排序（Insertion Sort）</h2><h3 id="算法描述-2"><a href="#算法描述-2" class="headerlink" title="算法描述"></a>算法描述</h3><ol>
+<li>取第1个元素，默认为已排序；</li>
+<li>从右边未排序的元素中，取第一个元素，跟已排序的元素做比较（从后往前）；</li>
+<li>如果遇到比他大的，则交换位置，遇到比他小的或到头了，则停止；</li>
+<li>重复1～3操作，直到排序完成。</li>
+</ol>
+<h3 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">swap</span><span class="params">(&amp;$arr, $intI, $intJ)</span> </span>&#123;</span><br><span class="line">    $intTmp = $arr[$intI];</span><br><span class="line">    $arr[$intI] = $arr[$intJ];</span><br><span class="line">    $arr[$intJ] = $intTmp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">insertionSort</span><span class="params">($arr)</span> </span>&#123;</span><br><span class="line">    $intN = count($arr);</span><br><span class="line">    <span class="keyword">for</span> ($intJ = <span class="number">1</span>; $intJ &lt; $intN; $intJ++) &#123;</span><br><span class="line">        $intI = $intJ - <span class="number">1</span>;</span><br><span class="line">        $intT = $intJ;</span><br><span class="line">        <span class="keyword">while</span> ($intI &gt;= <span class="number">0</span> &amp;&amp; $arr[$intT] &lt; $arr[$intI]) &#123;</span><br><span class="line">            swap($arr, $intI, $intT);</span><br><span class="line">            $intI--;</span><br><span class="line">            $intT--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> $arr;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$arr = <span class="keyword">array</span>(<span class="number">2</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">3</span>);</span><br><span class="line">$arr = insertionSort($arr);</span><br><span class="line">var_export($arr);</span><br></pre></td></tr></table></figure>
+<h2 id="快速排序（Quick-Sort）"><a href="#快速排序（Quick-Sort）" class="headerlink" title="快速排序（Quick Sort）"></a>快速排序（Quick Sort）</h2><h3 id="算法描述-3"><a href="#算法描述-3" class="headerlink" title="算法描述"></a>算法描述</h3><ol>
+<li>取基准：取第1个元素作为基准；</li>
+<li>划分区：用基准元素跟其它比较，比他小的放在他左边，比他大的放在他右边；</li>
+<li>递归：把左、右两边的元素分别递归重复步骤1、2，最后把结果合并。</li>
+</ol>
+<h3 id="代码实现-3"><a href="#代码实现-3" class="headerlink" title="代码实现"></a>代码实现</h3><p>方法1：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">quickSort</span><span class="params">($arr)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">isset</span>($arr[<span class="number">1</span>])) &#123;</span><br><span class="line">        <span class="keyword">return</span> $arr;</span><br><span class="line">    &#125;</span><br><span class="line">    $intPivot = $arr[<span class="number">0</span>];</span><br><span class="line">    $arrL = <span class="keyword">array</span>();</span><br><span class="line">    $arrR = <span class="keyword">array</span>();</span><br><span class="line">    <span class="keyword">for</span> ($intI = <span class="number">1</span>; $intI &lt; count($arr); $intI++) &#123;</span><br><span class="line">        <span class="keyword">if</span> ($arr[$intI] &lt; $intPivot) &#123;</span><br><span class="line">            $arrL[] = $arr[$intI];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            $arrR[] = $arr[$intI];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    $arrL = quickSort($arrL);</span><br><span class="line">    $arrL[] = $intPivot;</span><br><span class="line">    $arrR = quickSort($arrR);</span><br><span class="line">    <span class="keyword">return</span> array_merge($arrL, $arrR);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$arr = <span class="keyword">array</span>(<span class="number">2</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">3</span>);</span><br><span class="line">$arr = quickSort($arr);</span><br><span class="line">var_export($arr);</span><br></pre></td></tr></table></figure>
+<p>方法2：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">_quickSort</span><span class="params">(&amp;$arr, $intL, $intR)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> ($intL &gt;= $intR) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    $intI = $intL;</span><br><span class="line">    $intJ = $intR;</span><br><span class="line">    $intPivot = $arr[$intI];</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> ($intI &lt; $intJ) &#123;</span><br><span class="line">        <span class="keyword">while</span> ($intI &lt; $intJ &amp;&amp; $intPivot &lt;= $arr[$intJ]) &#123;</span><br><span class="line">            $intJ--;</span><br><span class="line">        &#125;</span><br><span class="line">        $arr[$intI] = $arr[$intJ];</span><br><span class="line">        <span class="keyword">while</span> ($intI &lt; $intJ &amp;&amp; $intPivot &gt; $arr[$intI]) &#123;</span><br><span class="line">            $intI++;</span><br><span class="line">        &#125;</span><br><span class="line">        $arr[$intJ] = $arr[$intI];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    $arr[$intI] = $intPivot;</span><br><span class="line">    _quickSort($arr, $intL, $intI - <span class="number">1</span>);</span><br><span class="line">    _quickSort($arr, $intI + <span class="number">1</span>, $intR);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">quickSort</span><span class="params">($arr)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">isset</span>($arr[<span class="number">1</span>])) &#123;</span><br><span class="line">        <span class="keyword">return</span> $arr;</span><br><span class="line">    &#125;</span><br><span class="line">    _quickSort($arr, <span class="number">0</span>, count($arr) - <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span> $arr;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$arr = <span class="keyword">array</span>(<span class="number">2</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">3</span>);</span><br><span class="line">$arr = quickSort($arr);</span><br><span class="line">var_export($arr);</span><br></pre></td></tr></table></figure>
+<h2 id="堆排序（Heap-Sort）"><a href="#堆排序（Heap-Sort）" class="headerlink" title="堆排序（Heap Sort）"></a>堆排序（Heap Sort）</h2><h3 id="算法描述-4"><a href="#算法描述-4" class="headerlink" title="算法描述"></a>算法描述</h3><ol>
+<li>将待排序元素，构成大顶堆（二叉树结构，顶部为最大值），此堆为初始无序区；</li>
+<li>将堆顶第一个元素与最后一个n元素交换，得到新的无序区和有序区。</li>
+<li>重复步骤1~2，直到无序区没有元素。</li>
+</ol>
+<h3 id="代码实现-4"><a href="#代码实现-4" class="headerlink" title="代码实现"></a>代码实现</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">swap</span><span class="params">(&amp;$arr, $intI, $intJ)</span> </span>&#123;</span><br><span class="line">    $intTmp = $arr[$intI];</span><br><span class="line">    $arr[$intI] = $arr[$intJ];</span><br><span class="line">    $arr[$intJ] = $intTmp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">heapify</span><span class="params">(&amp;$arr, $intI, $intJ)</span> </span>&#123;</span><br><span class="line">    $intL = $intI * <span class="number">2</span> + <span class="number">1</span>;</span><br><span class="line">    $intR = $intL + <span class="number">1</span>;</span><br><span class="line">    $intMax = $intI;</span><br><span class="line">    <span class="keyword">if</span> ($intL &lt;= $intJ &amp;&amp; $arr[$intL] &gt; $arr[$intMax]) &#123;</span><br><span class="line">        $intMax = $intL;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ($intR &lt;= $intJ &amp;&amp; $arr[$intR] &gt; $arr[$intMax]) &#123;</span><br><span class="line">        $intMax = $intR;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ($intI != $intMax) &#123;</span><br><span class="line">        swap($arr, $intI, $intMax);</span><br><span class="line">        heapify($arr, $intMax, $intJ);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">heapSort</span><span class="params">($arr)</span> </span>&#123;</span><br><span class="line">    $intJ = count($arr) - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span> ($intJ &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> $arr;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> ($intI = $intJ / <span class="number">2</span> - <span class="number">1</span>; $intI &gt;= <span class="number">0</span>; $intI--) &#123;</span><br><span class="line">        heapify($arr, $intI, $intJ);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> ($intI = $intJ; $intI &gt;= <span class="number">1</span>; $intI--) &#123;</span><br><span class="line">        swap($arr, <span class="number">0</span>, $intI);</span><br><span class="line">        heapify($arr, <span class="number">0</span>, $intI - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> $arr;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$arr = <span class="keyword">array</span>(<span class="number">2</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">3</span>);</span><br><span class="line">$arr = heapSort($arr);</span><br><span class="line">var_export($arr);</span><br></pre></td></tr></table></figure>
+<h2 id="桶排序（Bucket-Sort）"><a href="#桶排序（Bucket-Sort）" class="headerlink" title="桶排序（Bucket Sort）"></a>桶排序（Bucket Sort）</h2><h3 id="算法描述-5"><a href="#算法描述-5" class="headerlink" title="算法描述"></a>算法描述</h3><ol>
+<li>假设待排序的一组元素分布在一个范围内，并将这一范围划分为N个子范围，也就是桶；</li>
+<li>将待排序的一组元素，分档放入这些桶，并将桶中的元素进行排序；</li>
+<li>将每个桶中的数据有序地合并起来。</li>
+</ol>
+<h3 id="代码实现-5"><a href="#代码实现-5" class="headerlink" title="代码实现"></a>代码实现</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bucketSort</span><span class="params">($arr, $intMax)</span> </span>&#123;</span><br><span class="line">    $arrBucket = array_fill(<span class="number">0</span>, $intMax + <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> ($intI = <span class="number">0</span>; $intI &lt; count($arr); $intI++) &#123;</span><br><span class="line">        $arrBucket[$arr[$intI]]++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $arrSort = <span class="keyword">array</span>();</span><br><span class="line">    <span class="keyword">for</span> ($intI = <span class="number">0</span>; $intI &lt;= $intMax; $intI++) &#123;</span><br><span class="line">        <span class="keyword">for</span> ($intJ = <span class="number">1</span>; $intJ &lt;= $arrBucket[$intI]; $intJ++) &#123;</span><br><span class="line">            $arrSort[] = $intI;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> $arrSort;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$arr = <span class="keyword">array</span>(<span class="number">2</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">3</span>);</span><br><span class="line">$arr = bucketSort($arr, <span class="number">6</span>);</span><br><span class="line">var_export($arr);</span><br></pre></td></tr></table></figure>
+
+        </div>
+
+        
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/">php</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sort/">sort</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/03/23/算法/简单排序算法/&title=《简单排序算法》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/03/23/算法/简单排序算法/&title=《简单排序算法》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/03/23/算法/简单排序算法/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《简单排序算法》 — Zfd's blog.&url=https://zfd.github.io/2018/03/23/算法/简单排序算法/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/03/23/算法/简单排序算法/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/03/23/算法/简单查找算法/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">简单查找算法</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/03/20/服务器/memcached、redis比较/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">memcached、redis比较</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <!-- todo hide
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    -->
+    <div class="bottom">
+        <p><span>zfd &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/03/23/算法/简单排序算法/&title=《简单排序算法》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/03/23/算法/简单排序算法/&title=《简单排序算法》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/03/23/算法/简单排序算法/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《简单排序算法》 — Zfd's blog.&url=https://zfd.github.io/2018/03/23/算法/简单排序算法/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/03/23/算法/简单排序算法/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACK0lEQVR42u3a0WrDMAwF0P7/T2ewp8Ga9Ep2CrGPn0pwHZ8OPMnS6xWP43dcPzn71t+Z1+v8nz95YGBgPJZxXI7rOT12sn6+NwwMjH0Y11u5fsHZ/GT9fJ0Pe8bAwMAobqsaIPZmYmBgYCTJZyF0C6hfPXAxMDAeyEiS2F4K2kuVb8zFMTAwHsioFga++fnG+gYGBsZDGEdxVKnVbzV3hYGBsTQjD+zmtl/kz/M0GAMDYwdGXqrMX1Bt10gS41M8BgbGBozeUdsLGfP0uLA3DAyMRRnVI6/3ml6SXK5sYGBgLMoYOXCTdorqytWLvAmhIQYGxgMZd7R/JStXSwsYGBj7MKqXX3npMQ8fqz/imz1gYGBswKiGYuNB4eRCJgYGxgaMWRdn1XQ0Lw98CCUxMDCWZuS36yMFzlklgcIBjYGBsSgjP2p7CepI2SBPejEwMNZj9I7XXvg4K2U9/QtgYGAsyugVHfOtVMPEvHiJgYGxG2P8uj/fUBJ0Js/frIaBgbEoo3oFln/Oy5aFpoqzwxcDA2MbxtxYK7l6q/5MWecFBgbGaoycVy0DVJswRvaJgYGxNuMojmp1tFckKBdHMTAwlmZMO6Hj4kFeGMhLpBgYGDswqmXFvGzZa+lo7gEDA2MDRvUKrIcc/w/wodkCAwNje0b1oq3XCpaQTkNDDAwMjDjh7M3sXclhYGDsw8gPxPEmiWRmeT8YGBhLM+Ze9/fauUbCSgwMjKUZP68KhJqUUmTcAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.7.2"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.7.2" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

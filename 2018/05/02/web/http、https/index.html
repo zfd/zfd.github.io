@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>http、https | Zfd&#39;s blog.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    
+    <meta name="keywords" content="http,https">
+    <meta name="description" content="TCP 面向连接，可靠的，基于字节流的传输层协议。  报文格式 源端口，目的端口：16位+16位（共4字节，4bytes则4*8=32位） 序列号：32位 确认号：32位 首部长度（4位）+保留（6位）+6个标志位（URG\ACK\PSH\PST\SYN\FIN）+窗口大小（16位） 16位检验和+16位紧急指针 选项+填充（可选，保证报文长度是32的整数倍） 数据（可选）  首部：固定20个字节">
+<meta name="keywords" content="http,https">
+<meta property="og:type" content="article">
+<meta property="og:title" content="http、https">
+<meta property="og:url" content="https://zfd.github.io/2018/05/02/web/http、https/index.html">
+<meta property="og:site_name" content="Zfd&#39;s blog.">
+<meta property="og:description" content="TCP 面向连接，可靠的，基于字节流的传输层协议。  报文格式 源端口，目的端口：16位+16位（共4字节，4bytes则4*8=32位） 序列号：32位 确认号：32位 首部长度（4位）+保留（6位）+6个标志位（URG\ACK\PSH\PST\SYN\FIN）+窗口大小（16位） 16位检验和+16位紧急指针 选项+填充（可选，保证报文长度是32的整数倍） 数据（可选）  首部：固定20个字节">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-22T09:48:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="http、https">
+<meta name="twitter:description" content="TCP 面向连接，可靠的，基于字节流的传输层协议。  报文格式 源端口，目的端口：16位+16位（共4字节，4bytes则4*8=32位） 序列号：32位 确认号：32位 首部长度（4位）+保留（6位）+6个标志位（URG\ACK\PSH\PST\SYN\FIN）+窗口大小（16位） 16位检验和+16位紧急指针 选项+填充（可选，保证报文长度是32的整数倍） 数据（可选）  首部：固定20个字节">
+    
+        <link rel="alternate" type="application/atom+xml" title="Zfd&#39;s blog." href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/icon_trans.png">
+    <link rel="stylesheet" href="/css/style.css?v=1.7.2">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/icon.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zfd</h5>
+          <a href="mailto:zf.dong@qq.com" title="zf.dong@qq.com" class="mail">zf.dong@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                首页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zfd" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">http、https</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <!-- todo hide -->
+        <a href="javascript:;" style="display:none;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">http、https</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-05-01T16:01:41.000Z" itemprop="datePublished" class="page-time">
+  2018-05-01
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/web/">web</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>目录</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#TCP"><span class="post-toc-number">1.</span> <span class="post-toc-text">TCP</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#报文格式"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">报文格式</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#三次握手"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">三次握手</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#四次挥手"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">四次挥手</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#http"><span class="post-toc-number">2.</span> <span class="post-toc-text">http</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#http请求"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">http请求</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#http响应"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">http响应</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#状态码"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">状态码</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1XX，指定客户端的响应动作"><span class="post-toc-number">2.3.1.</span> <span class="post-toc-text">1XX，指定客户端的响应动作</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2XX，服务端成功处理了请求"><span class="post-toc-number">2.3.2.</span> <span class="post-toc-text">2XX，服务端成功处理了请求</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3XX，重定向类"><span class="post-toc-number">2.3.3.</span> <span class="post-toc-text">3XX，重定向类</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#4XX，客户端请求错误"><span class="post-toc-number">2.3.4.</span> <span class="post-toc-text">4XX，客户端请求错误</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#5XX，服务端错误"><span class="post-toc-number">2.3.5.</span> <span class="post-toc-text">5XX，服务端错误</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#http的缺点"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">http的缺点</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#https"><span class="post-toc-number">3.</span> <span class="post-toc-text">https</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#对称加密、非对称加密"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">对称加密、非对称加密</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#https工作流程"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">https工作流程</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#https优点"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">https优点</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#https缺点"><span class="post-toc-number">3.4.</span> <span class="post-toc-text">https缺点</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-web/http、https"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">http、https</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-05-01 16:01:41" datetime="2018-05-01T16:01:41.000Z"  itemprop="datePublished">2018-05-01</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/web/">web</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2><blockquote>
+<p>面向连接，可靠的，基于字节流的传输层协议。</p>
+</blockquote>
+<h3 id="报文格式"><a href="#报文格式" class="headerlink" title="报文格式"></a>报文格式</h3><ul>
+<li>源端口，目的端口：16位+16位（共4字节，4bytes则4*8=32位）</li>
+<li>序列号：32位</li>
+<li>确认号：32位</li>
+<li>首部长度（4位）+保留（6位）+6个标志位（URG\ACK\PSH\PST\SYN\FIN）+窗口大小（16位）</li>
+<li>16位检验和+16位紧急指针</li>
+<li>选项+填充（可选，保证报文长度是32的整数倍）</li>
+<li>数据（可选）</li>
+</ul>
+<p>首部：固定20个字节（上面前5行），选项为可选；数据不属于首部报文。</p>
+<p>首部长度：1111，十进制的15，表示15*32/8=60字节，即最大长度；最小长度为20字节（没有选项、数据）。</p>
+<h3 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h3><blockquote>
+<p>SYN：同步序列号标志位，seq：序列号<br>ACK：确认序列号标志位，ack：确认号</p>
+</blockquote>
+<ol>
+<li>client-&gt;server，SYN=1，seq=j，client进入syn_sent状态；</li>
+<li>server-&gt;client，ACK=1，ack=j+1，SYN=1，seq=k，server进入syn_recv状态；</li>
+<li>client-&gt;server，ACK=1，ack=k+1，成功建立连接。</li>
+</ol>
+<h3 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h3><blockquote>
+<p>双工通信，断开时，2边都要发送FIN，因为第一次FIN只表示一边断开，另一边可能还在发送数据。</p>
+</blockquote>
+<ol>
+<li>client-&gt;server，FIN=1，seq=m，client进入fin_wait状态；</li>
+<li>server-&gt;client，ACK=1，ack=m+1，server进入close_wait状态；</li>
+<li>server-&gt;client，FIN=1，seq=n，server进入last_ack状态，client进入time_wait状态；</li>
+<li>client-&gt;server，ACK=1，ack=n+1，完成4次挥手。</li>
+</ol>
+<h2 id="http"><a href="#http" class="headerlink" title="http"></a>http</h2><blockquote>
+<p>HyperText Transfer Protocol，超文本传输协议。</p>
+</blockquote>
+<h3 id="http请求"><a href="#http请求" class="headerlink" title="http请求"></a>http请求</h3><blockquote>
+<p>CRLF：carriage-return line-feed，回车、换行，\r\n</p>
+</blockquote>
+<ul>
+<li>请求行：请求方法 url 协议/版本 CRLF</li>
+<li>请求头：key ： value CRLF（N行）</li>
+<li>空行</li>
+<li>请求体：get请求没有正文，post请求正文是参数；</li>
+</ul>
+<h3 id="http响应"><a href="#http响应" class="headerlink" title="http响应"></a>http响应</h3><ul>
+<li>状态行：协议/版本 状态码 状态码描述 CRLF</li>
+<li>响应头：key ： value CRLF（N行）</li>
+<li>空行</li>
+<li>响应体：html/json等</li>
+</ul>
+<h3 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h3><h4 id="1XX，指定客户端的响应动作"><a href="#1XX，指定客户端的响应动作" class="headerlink" title="1XX，指定客户端的响应动作"></a>1XX，指定客户端的响应动作</h4><ul>
+<li>100，continue，，客户端应当继续发送请求；</li>
+<li>101，switching protocols，服务器通过Upgrade消息头通知客户端采用不同协议，下个请求将转换协议；</li>
+</ul>
+<h4 id="2XX，服务端成功处理了请求"><a href="#2XX，服务端成功处理了请求" class="headerlink" title="2XX，服务端成功处理了请求"></a>2XX，服务端成功处理了请求</h4><ul>
+<li>200，ok，请求成功；</li>
+<li>201，created，请求已经被实现，而且有一个新的资源已经依据请求的需要而建立，且其URI已经随Location头信息返回；</li>
+<li>202，accepted，服务器已接受请求，但尚未处理；</li>
+<li>203，non-authoritative information，文档已经正常地返回，但一些应答头可能不正确，因为使用的是文档的拷贝，非权威性信息；</li>
+<li>204，no content，服务器成功处理了请求，但没有返回任何内容；</li>
+<li>205，reset content，没有新内容返回，但是浏览器要清除表单域；</li>
+</ul>
+<h4 id="3XX，重定向类"><a href="#3XX，重定向类" class="headerlink" title="3XX，重定向类"></a>3XX，重定向类</h4><ul>
+<li>300，multiple choices/多重选择，被请求的资源可以在多个地方找到，并返回列表供选择（如有首选项，则在location中指定）；</li>
+<li>301，moved permanently，请求永久重定向；</li>
+<li>302，found，请求临时重定向；</li>
+<li>304，not modified，客户端有缓存，可以直接使用；</li>
+<li>305，use proxy，请求必须通过指定的代理才能被访问（location中指定）；</li>
+</ul>
+<h4 id="4XX，客户端请求错误"><a href="#4XX，客户端请求错误" class="headerlink" title="4XX，客户端请求错误"></a>4XX，客户端请求错误</h4><ul>
+<li>400，bad request，客户端请求中有语法错误；</li>
+<li>401，unauthorized，未授权，客户端请求需要身份验证；</li>
+<li>403，forbidden，服务器拒绝该请求，权限不足等；</li>
+<li>404，not found，服务器找不到该请求的任何资源；</li>
+<li>405，method not allow，请求的方法不允许；</li>
+</ul>
+<h4 id="5XX，服务端错误"><a href="#5XX，服务端错误" class="headerlink" title="5XX，服务端错误"></a>5XX，服务端错误</h4><ul>
+<li>500，internal server error，服务器错误；</li>
+<li>501，not implemented，服务端不支持请求中要求的功能；</li>
+<li>502，bad gateway，网关错误，如：php-fpm挂了；</li>
+<li>503，service unavailable，服务器在维护或已过载，无法处理请求；</li>
+<li>504，gateway timeout，网关超时；</li>
+<li>505，http version not supported，不支持该http版本；</li>
+</ul>
+<h3 id="http的缺点"><a href="#http的缺点" class="headerlink" title="http的缺点"></a>http的缺点</h3><ul>
+<li>窃听风险：黑客可以获取通信的内容；</li>
+<li>篡改风险：黑客可以修改通信的内容；</li>
+<li>冒充风险：黑客可以冒充他人身份参与通信；</li>
+</ul>
+<h2 id="https"><a href="#https" class="headerlink" title="https"></a>https</h2><blockquote>
+<p>http+ssl/tls</p>
+</blockquote>
+<h3 id="对称加密、非对称加密"><a href="#对称加密、非对称加密" class="headerlink" title="对称加密、非对称加密"></a>对称加密、非对称加密</h3><p>对称加密效率更高，非对称加密更安全。</p>
+<h3 id="https工作流程"><a href="#https工作流程" class="headerlink" title="https工作流程"></a>https工作流程</h3><ol>
+<li>客户端发出https请求；</li>
+<li>服务器返回ca证书（公钥、数字签名、相关信息等）；</li>
+<li>客户端验证证书；</li>
+<li>客户端生成对称秘钥（随机字符串），用公钥加密，并发送服务器；</li>
+<li>服务器用私钥解密，得到对称秘钥，然后用对称秘钥加密请求的返回内容；</li>
+<li>客户端用对称秘钥解密返回内容，并处理；</li>
+<li>后续请求都用该对称秘钥加密、解密通信内容。</li>
+</ol>
+<h3 id="https优点"><a href="#https优点" class="headerlink" title="https优点"></a>https优点</h3><ul>
+<li>解决窃听风险：通信内容加密；</li>
+<li>解决篡改风险：具有校验机制，一旦被篡改，通信双方会立刻发现；</li>
+<li>解决冒充风险：配备证书，防止身份被冒充；</li>
+</ul>
+<h3 id="https缺点"><a href="#https缺点" class="headerlink" title="https缺点"></a>https缺点</h3><ul>
+<li>ssl证书费用高，增加部署、维护的工作；</li>
+<li>https请求，握手次数增加，降低用户访问速度；</li>
+<li>http重定向到https，增加了用户的访问耗时；</li>
+<li>https涉及的安全算法会增加cpu资源的消耗；</li>
+</ul>
+
+        </div>
+
+        
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/">http</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/https/">https</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/05/02/web/http、https/&title=《http、https》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/05/02/web/http、https/&title=《http、https》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/05/02/web/http、https/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《http、https》 — Zfd's blog.&url=https://zfd.github.io/2018/05/02/web/http、https/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/05/02/web/http、https/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/05/03/linux/软链接、硬链接/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">软链接、硬链接</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/04/25/数据库/mysql事务/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">mysql事务</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <!-- todo hide
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    -->
+    <div class="bottom">
+        <p><span>zfd &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/05/02/web/http、https/&title=《http、https》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/05/02/web/http、https/&title=《http、https》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/05/02/web/http、https/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《http、https》 — Zfd's blog.&url=https://zfd.github.io/2018/05/02/web/http、https/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/05/02/web/http、https/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACHElEQVR42u3aO3LDMAwFwNz/0s5MqjSiHgAlY5PLyuOPxFUBAwS+vuL1+llXr3+vq18l71xd57GFgYHxsYzXcl3dYI3Jt5vfd319DAyMExhJkJ3zegF9/X0MDAyMKim58voRYGBgYDzLeLYcxcDAwFgzkmKyWo6+aS2OgYHxgYx5Y+DvXv9rfwMDA+MtGa/imgfBXoPh5o4YGBhbM6rHZ+tjtUnQzL9fyHAxMDC2YOQH95MG5FOF7iUGAwNja0YecPPGwDpMJ1vv7QoDA2NvRjXU9ga/eu3PUUsAAwNjI8ZoxKH4IHJq+RFjYGBsylgnfL2WwOSd/LFiYGCcxshDbbWp2Wtb5oEYAwPjHMZ8hCLH9JLCaGYEAwNjU0a1YZmH1N5Gqw0JDAyMcxi9VC8/GqsGzTzoY2BgnMaoJmd5Y7Ja0PaGMDAwMHZlTMYjcsCkGI6uhoGBcTAjaSL2SL0i9qb+xsDA2JQxCbXVYrV3hQfG1DAwMD6c0bvZpBDtBdyb+2JgYBzDyBO+efLXa47eFLEYGBibMnol67yg7eWq0R8DBgbGdoxXceW/nQxt5N+/zHAxMDA2YlRP13uf5uMaeXDHwMA4jTEPnZNGQjXgYmBgnMzolbVPJXDVobHCBxgYGIcx8sRuUpRW94OBgYGRbC5vCeTHduUmAQYGxgGMvIidbLqXdEahGQMDY2tGtXSsUifth/JYGAYGxm6Mb0uMhJpp0eM4AAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.7.2"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.7.2" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>设计模式 | Zfd&#39;s blog.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    
+    <meta name="keywords" content="php,设计模式">
+    <meta name="description" content="设计模式的理解：代码设计经验的总结。设计模式的作用：降低代码耦合度，提高代码重用性、可读性、可靠性。  单例模式主要作用在整个项目中创建唯一对象实例。 适用场景如：数据库连接。 实现方法 $_instance必须声明为静态的私有变量。 构造函数和析构函数必须声明为私有，防止外部程序new。 私有的__clone()方法防止克隆对象。 getInstance()方法必须设置为公有的，必须调用此方法">
+<meta name="keywords" content="php,设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式">
+<meta property="og:url" content="https://zfd.github.io/2018/02/25/设计模式/设计模式/index.html">
+<meta property="og:site_name" content="Zfd&#39;s blog.">
+<meta property="og:description" content="设计模式的理解：代码设计经验的总结。设计模式的作用：降低代码耦合度，提高代码重用性、可读性、可靠性。  单例模式主要作用在整个项目中创建唯一对象实例。 适用场景如：数据库连接。 实现方法 $_instance必须声明为静态的私有变量。 构造函数和析构函数必须声明为私有，防止外部程序new。 私有的__clone()方法防止克隆对象。 getInstance()方法必须设置为公有的，必须调用此方法">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-22T09:48:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计模式">
+<meta name="twitter:description" content="设计模式的理解：代码设计经验的总结。设计模式的作用：降低代码耦合度，提高代码重用性、可读性、可靠性。  单例模式主要作用在整个项目中创建唯一对象实例。 适用场景如：数据库连接。 实现方法 $_instance必须声明为静态的私有变量。 构造函数和析构函数必须声明为私有，防止外部程序new。 私有的__clone()方法防止克隆对象。 getInstance()方法必须设置为公有的，必须调用此方法">
+    
+        <link rel="alternate" type="application/atom+xml" title="Zfd&#39;s blog." href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/icon_trans.png">
+    <link rel="stylesheet" href="/css/style.css?v=1.7.2">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/icon.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zfd</h5>
+          <a href="mailto:zf.dong@qq.com" title="zf.dong@qq.com" class="mail">zf.dong@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                首页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zfd" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">设计模式</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <!-- todo hide -->
+        <a href="javascript:;" style="display:none;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">设计模式</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-02-24T16:42:42.000Z" itemprop="datePublished" class="page-time">
+  2018-02-24
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>目录</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#单例模式"><span class="post-toc-number">1.</span> <span class="post-toc-text">单例模式</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#主要作用"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">主要作用</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#适用场景"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">适用场景</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#实现方法"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">实现方法</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#代码demo"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">代码demo</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简单工厂模式"><span class="post-toc-number">2.</span> <span class="post-toc-text">简单工厂模式</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#优缺点"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">优缺点</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#适用场景-1"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">适用场景</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#实现方法-1"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">实现方法</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#代码demo-1"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">代码demo</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#注册模式"><span class="post-toc-number">3.</span> <span class="post-toc-text">注册模式</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#主要作用-1"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">主要作用</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#实现方法-2"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">实现方法</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#代码demo-2"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">代码demo</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#适配器模式"><span class="post-toc-number">4.</span> <span class="post-toc-text">适配器模式</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#主要作用-2"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">主要作用</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#适用场景-2"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">适用场景</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#实现方法-3"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">实现方法</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#代码demo-3"><span class="post-toc-number">4.4.</span> <span class="post-toc-text">代码demo</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#策略模式"><span class="post-toc-number">5.</span> <span class="post-toc-text">策略模式</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#主要作用-3"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">主要作用</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#适用场景-3"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">适用场景</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#实现方法-4"><span class="post-toc-number">5.3.</span> <span class="post-toc-text">实现方法</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#代码demo-4"><span class="post-toc-number">5.4.</span> <span class="post-toc-text">代码demo</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#观察者模式"><span class="post-toc-number">6.</span> <span class="post-toc-text">观察者模式</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#优缺点-1"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">优缺点</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#适用场景-4"><span class="post-toc-number">6.2.</span> <span class="post-toc-text">适用场景</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#代码demo-5"><span class="post-toc-number">6.3.</span> <span class="post-toc-text">代码demo</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-设计模式/设计模式"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">设计模式</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-02-24 16:42:42" datetime="2018-02-24T16:42:42.000Z"  itemprop="datePublished">2018-02-24</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/设计模式/">设计模式</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>设计模式的理解：代码设计经验的总结。<br>设计模式的作用：降低代码耦合度，提高代码重用性、可读性、可靠性。</p>
+</blockquote>
+<h2 id="单例模式"><a href="#单例模式" class="headerlink" title="单例模式"></a>单例模式</h2><h3 id="主要作用"><a href="#主要作用" class="headerlink" title="主要作用"></a>主要作用</h3><p>在整个项目中创建唯一对象实例。</p>
+<h3 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h3><p>如：数据库连接。</p>
+<h3 id="实现方法"><a href="#实现方法" class="headerlink" title="实现方法"></a>实现方法</h3><ul>
+<li>$_instance必须声明为静态的私有变量。</li>
+<li>构造函数和析构函数必须声明为私有，防止外部程序new。</li>
+<li>私有的__clone()方法防止克隆对象。</li>
+<li>getInstance()方法必须设置为公有的，必须调用此方法以返回实例的一个引用。</li>
+</ul>
+<h3 id="代码demo"><a href="#代码demo" class="headerlink" title="代码demo"></a>代码demo</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php"> </span></span><br><span class="line"><span class="php"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span></span><br><span class="line"><span class="php">    <span class="keyword">private</span> <span class="keyword">static</span> $instance;</span></span><br><span class="line"><span class="php">    </span></span><br><span class="line"><span class="php">    <span class="comment">//私有构造方法，禁止使用new创建对象</span></span></span><br><span class="line"><span class="php">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span> </span>&#123;&#125;</span></span><br><span class="line"><span class="php">    </span></span><br><span class="line"><span class="php">    <span class="comment">//私有析构方法</span></span></span><br><span class="line"><span class="php">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span> </span>&#123;&#125;</span></span><br><span class="line"><span class="php">    </span></span><br><span class="line"><span class="php">    <span class="comment">//将克隆方法设为私有，禁止克隆对象</span></span></span><br><span class="line"><span class="php">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">__clone</span><span class="params">()</span> </span>&#123;&#125;</span></span><br><span class="line"><span class="php">        </span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">if</span> (!<span class="keyword">isset</span>(<span class="keyword">self</span>::$instance)) &#123;</span></span><br><span class="line"><span class="php">            <span class="keyword">self</span>::$instance = <span class="keyword">new</span> <span class="keyword">self</span>;</span></span><br><span class="line"><span class="php">        &#125;</span></span><br><span class="line"><span class="php">        <span class="keyword">return</span> <span class="keyword">self</span>::$instance;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php">    </span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">say</span><span class="params">()</span> </span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">echo</span> <span class="string">"这是用单例模式创建对象实例\n"</span>;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php">    </span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">operation</span><span class="params">()</span> </span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">echo</span> <span class="string">"这里可以添加其他方法和操作\n"</span>;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">$objSingle = Singleton::getInstance();</span></span><br><span class="line"><span class="php">$objSingle-&gt;say();</span></span><br><span class="line"><span class="php">$objSingle-&gt;operation();</span></span><br><span class="line"><span class="php"> </span></span><br><span class="line"><span class="php">$objSingleNew = Singleton::getInstance();</span></span><br><span class="line"><span class="php">var_dump($shiyanlou === $objSingleNew);</span></span><br></pre></td></tr></table></figure>
+<h2 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h2><h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><p>优点：</p>
+<ul>
+<li>外界仅需要使用这个对象即可，不必关系创建。</li>
+<li>避免改变某个类的名字或者方法之后，在调用这个类的所有的代码中都修改它的名字或者参数。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>产品类不断增多的时候，工厂类的条件判断逻辑增多，不利于维护、拓展。</li>
+</ul>
+<h3 id="适用场景-1"><a href="#适用场景-1" class="headerlink" title="适用场景"></a>适用场景</h3><ul>
+<li>工厂类负责创建的对象比较少。</li>
+<li>客户只知道传入工厂类的参数，对于如何创建对象（逻辑）不关心。</li>
+<li>由于简单工厂很容易违反高内聚责任分配原则，因此一般只在很简单的情况下应用。</li>
+</ul>
+<h3 id="实现方法-1"><a href="#实现方法-1" class="headerlink" title="实现方法"></a>实现方法</h3><ul>
+<li>工厂方法或者类生成对象，而不是在代码中直接new。 </li>
+</ul>
+<h3 id="代码demo-1"><a href="#代码demo-1" class="headerlink" title="代码demo"></a>代码demo</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?php</span> </span></span><br><span class="line"><span class="php"><span class="comment">//简单工厂模式</span></span></span><br><span class="line"><span class="php"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> </span>&#123;</span></span><br><span class="line"><span class="php">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span> </span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">echo</span> <span class="string">"I am Cat class &lt;br&gt;"</span>;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span> </span>&#123;</span></span><br><span class="line"><span class="php">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span> </span>&#123;</span></span><br><span class="line"><span class="php">      <span class="keyword">echo</span> <span class="string">"I am Dog class &lt;br&gt;"</span>;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php"><span class="class"><span class="keyword">class</span> <span class="title">Factory</span> </span>&#123;</span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">CreateAnimal</span><span class="params">($name)</span></span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">if</span> ($name == <span class="string">'cat'</span>) &#123;</span></span><br><span class="line"><span class="php">            <span class="keyword">return</span> <span class="keyword">new</span> Cat();</span></span><br><span class="line"><span class="php">        &#125;</span></span><br><span class="line"><span class="php">        <span class="keyword">elseif</span> ($name == <span class="string">'dog'</span>) &#123;</span></span><br><span class="line"><span class="php">            <span class="keyword">return</span> <span class="keyword">new</span> Dog();</span></span><br><span class="line"><span class="php">        &#125;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">$cat = Factory::CreateAnimal(<span class="string">'cat'</span>);</span></span><br><span class="line"><span class="php">$dog = Factory::CreateAnimal(<span class="string">'dog'</span>);</span></span><br></pre></td></tr></table></figure>
+<h2 id="注册模式"><a href="#注册模式" class="headerlink" title="注册模式"></a>注册模式</h2><h3 id="主要作用-1"><a href="#主要作用-1" class="headerlink" title="主要作用"></a>主要作用</h3><p>解决全局共享和交换对象。</p>
+<h3 id="实现方法-2"><a href="#实现方法-2" class="headerlink" title="实现方法"></a>实现方法</h3><ul>
+<li>将对象注册到全局静态变量。</li>
+<li>任何地方直接去访问。</li>
+</ul>
+<h3 id="代码demo-2"><a href="#代码demo-2" class="headerlink" title="代码demo"></a>代码demo</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php"><span class="class"><span class="keyword">class</span> <span class="title">Register</span> </span>&#123;</span></span><br><span class="line"><span class="php">    <span class="keyword">protected</span> <span class="keyword">static</span> $objects;</span></span><br><span class="line"><span class="php">    </span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">set</span><span class="params">($alias,$object)</span> </span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">self</span>::$objects[$alias] = $object;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php">    </span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">get</span><span class="params">($name)</span> </span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">return</span> <span class="keyword">self</span>::$objects[$name];</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php">    </span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">_unset</span><span class="params">($alias)</span> </span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">unset</span>(<span class="keyword">self</span>::$objects[$alias]);</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php">&#125;</span></span><br></pre></td></tr></table></figure>
+<h2 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h2><blockquote>
+<p>区别于策略模式，不改变已有类的方法，通过一套接口把已有类的方法统一成一样的api。<br>选择了一个适配器就从头用到尾，中途不能更改。</p>
+</blockquote>
+<h3 id="主要作用-2"><a href="#主要作用-2" class="headerlink" title="主要作用"></a>主要作用</h3><p>将一个类的接口适配成用户所期待的。</p>
+<h3 id="适用场景-2"><a href="#适用场景-2" class="headerlink" title="适用场景"></a>适用场景</h3><p>想使用一个已经存在的类，但是他的接口并不符合要求。<br>如：</p>
+<ul>
+<li>PHP中的数据库操作有MySQL，MySQLi，PDO三种，可以用适配器模式统一成一致，使不同的数据库操作，统一成一样的API。</li>
+<li>可以将memcache,redis等不同的缓存函数适配成统一的API。 </li>
+</ul>
+<h3 id="实现方法-3"><a href="#实现方法-3" class="headerlink" title="实现方法"></a>实现方法</h3><ul>
+<li>首先定义一个接口（有几个方法，以及相应的参数）。</li>
+<li>有几种不同的情况，就写几个类实现该接口。</li>
+</ul>
+<h3 id="代码demo-3"><a href="#代码demo-3" class="headerlink" title="代码demo"></a>代码demo</h3><p>接口</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//IDatabase</span></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">IMooc</span>;</span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">IDatabase</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">connect</span><span class="params">($host, $user, $passwd, $dbname)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">query</span><span class="params">($sql)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">close</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>适配器类（实现目标接口）</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">MySQL</span><br><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php"><span class="keyword">namespace</span> <span class="title">IMooc</span>\<span class="title">Database</span>;</span></span><br><span class="line"><span class="php"><span class="keyword">use</span> <span class="title">IMooc</span>\<span class="title">IDatabase</span>;</span></span><br><span class="line"><span class="php"><span class="class"><span class="keyword">class</span> <span class="title">MySQL</span> <span class="keyword">implements</span> <span class="title">IDatabase</span> </span>&#123;</span></span><br><span class="line"><span class="php">    <span class="keyword">protected</span> $conn;</span></span><br><span class="line"><span class="php">    <span class="function"><span class="keyword">function</span> <span class="title">connect</span><span class="params">($host, $user, $passwd, $dbname)</span> </span>&#123;</span></span><br><span class="line"><span class="php">        $conn = mysql_connect($host, $user, $passwd);</span></span><br><span class="line"><span class="php">        mysql_select_db($dbname, $conn);</span></span><br><span class="line"><span class="php">        <span class="keyword">$this</span>-&gt;conn = $conn;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">    <span class="function"><span class="keyword">function</span> <span class="title">query</span><span class="params">($sql)</span> </span>&#123;</span></span><br><span class="line"><span class="php">        $res = mysql_query($sql, <span class="keyword">$this</span>-&gt;conn);</span></span><br><span class="line"><span class="php">        <span class="keyword">return</span> $res;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">    <span class="function"><span class="keyword">function</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span></span><br><span class="line"><span class="php">        mysql_close(<span class="keyword">$this</span>-&gt;conn);</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">MySQLi</span></span><br><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php"><span class="keyword">namespace</span> <span class="title">IMooc</span>\<span class="title">Database</span>;</span></span><br><span class="line"><span class="php"><span class="keyword">use</span> <span class="title">IMooc</span>\<span class="title">IDatabase</span>;</span></span><br><span class="line"><span class="php"><span class="class"><span class="keyword">class</span> <span class="title">MySQLi</span> <span class="keyword">implements</span> <span class="title">IDatabase</span> </span>&#123;</span></span><br><span class="line"><span class="php">    <span class="keyword">protected</span> $conn;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">    <span class="function"><span class="keyword">function</span> <span class="title">connect</span><span class="params">($host, $user, $passwd, $dbname)</span> </span>&#123;</span></span><br><span class="line"><span class="php">        $conn = mysqli_connect($host, $user, $passwd, $dbname);</span></span><br><span class="line"><span class="php">        <span class="keyword">$this</span>-&gt;conn = $conn;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">    <span class="function"><span class="keyword">function</span> <span class="title">query</span><span class="params">($sql)</span>  </span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">return</span> mysqli_query(<span class="keyword">$this</span>-&gt;conn, $sql);</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">    <span class="function"><span class="keyword">function</span> <span class="title">close</span><span class="params">()</span>  </span>&#123;</span></span><br><span class="line"><span class="php">        mysqli_close(<span class="keyword">$this</span>-&gt;conn);</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">PDO</span></span><br><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php"><span class="keyword">namespace</span> <span class="title">IMooc</span>\<span class="title">Database</span>;</span></span><br><span class="line"><span class="php"><span class="keyword">use</span> <span class="title">IMooc</span>\<span class="title">IDatabase</span>;</span></span><br><span class="line"><span class="php"><span class="class"><span class="keyword">class</span> <span class="title">PDO</span> <span class="keyword">implements</span> <span class="title">IDatabase</span> </span>&#123;</span></span><br><span class="line"><span class="php">    <span class="keyword">protected</span> $conn;</span></span><br><span class="line"><span class="php">    <span class="function"><span class="keyword">function</span> <span class="title">connect</span><span class="params">($host, $user, $passwd, $dbname)</span> </span>&#123;</span></span><br><span class="line"><span class="php">        $conn = <span class="keyword">new</span> \PDO(<span class="string">"mysql:host=$host;dbname=$dbname"</span>, $user, $passwd);</span></span><br><span class="line"><span class="php">        <span class="keyword">$this</span>-&gt;conn = $conn;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php">    </span></span><br><span class="line"><span class="php">    <span class="function"><span class="keyword">function</span> <span class="title">query</span><span class="params">($sql)</span> </span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;conn-&gt;query($sql);</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">    <span class="function"><span class="keyword">function</span> <span class="title">close</span><span class="params">()</span> </span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">unset</span>(<span class="keyword">$this</span>-&gt;conn);</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>使用</p>
+<figure class="highlight pony"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">IDatabase</span> mAdapter = <span class="function"><span class="keyword">new</span> <span class="title">PDO</span>();<span class="comment">//MySQL MySQLi PDO</span></span></span><br><span class="line"><span class="function"><span class="title">mAdapter</span>.<span class="title">connect</span>(...);</span></span><br></pre></td></tr></table></figure>
+<h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><blockquote>
+<p>区别于适配模式，类的方法都是新实现的，并且可以相互替换。</p>
+</blockquote>
+<h3 id="主要作用-3"><a href="#主要作用-3" class="headerlink" title="主要作用"></a>主要作用</h3><p>定义了一系列的算法，并将每一个算法封装起来，而且使它们还可以相互替换。</p>
+<h3 id="适用场景-3"><a href="#适用场景-3" class="headerlink" title="适用场景"></a>适用场景</h3><ul>
+<li>多个类只区别在表现行为不同，可以使用Strategy模式，在运行时动态选择具体要执行的行为。</li>
+<li>需要在不同情况下使用不同的策略(算法)，或者策略还可能在未来用其它方式来实现。</li>
+</ul>
+<h3 id="实现方法-4"><a href="#实现方法-4" class="headerlink" title="实现方法"></a>实现方法</h3><ul>
+<li>首先定义一个接口（有几个方法，以及相应的参数）。</li>
+<li>有几种不同的情况，就写几个类实现该接口。</li>
+<li>实现一个环境类，可以根据实际情况选择、切换策略。</li>
+</ul>
+<h3 id="代码demo-4"><a href="#代码demo-4" class="headerlink" title="代码demo"></a>代码demo</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php"></span></span><br><span class="line">/**</span><br><span class="line"> *策略模式</span><br><span class="line"> *定义一系列的算法，把每一个算法封装起来，并且使它们可相互替换。</span><br><span class="line"> *本模式使得算法可独立于使用它的客户变化</span><br><span class="line"><span class="php"> */</span></span><br><span class="line"><span class="php"></span></span><br><span class="line">/**</span><br><span class="line"> *出行旅游</span><br><span class="line"><span class="php"> */</span></span><br><span class="line"><span class="php"><span class="class"><span class="keyword">interface</span> <span class="title">TravelStrategy</span> </span>&#123;</span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">travelAlgorithm</span><span class="params">()</span></span>;</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line">/**</span><br><span class="line"> *具体策略类(ConcreteStrategy)</span><br><span class="line"> *1：乘坐飞机</span><br><span class="line"><span class="php"> */</span></span><br><span class="line"><span class="php"><span class="class"><span class="keyword">class</span> <span class="title">AirPlanelStrategy</span> <span class="keyword">implements</span> <span class="title">TravelStrategy</span> </span>&#123;</span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">travelAlgorithm</span><span class="params">()</span> </span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">echo</span> <span class="string">"travelbyAirPlain"</span>, <span class="string">"\n"</span>;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line">/**</span><br><span class="line"> *具体策略类(ConcreteStrategy)</span><br><span class="line"> *2：乘坐火车</span><br><span class="line"><span class="php"> */</span></span><br><span class="line"><span class="php"><span class="class"><span class="keyword">class</span> <span class="title">TrainStrategy</span> <span class="keyword">implements</span> <span class="title">TravelStrategy</span> </span>&#123;</span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">travelAlgorithm</span><span class="params">()</span> </span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">echo</span> <span class="string">"travelbyTrain"</span>, <span class="string">"\n"</span>;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line">/**</span><br><span class="line"> *具体策略类(ConcreteStrategy)</span><br><span class="line"> *3：骑自行车</span><br><span class="line"><span class="php"> */</span></span><br><span class="line"><span class="php"><span class="class"><span class="keyword">class</span> <span class="title">BicycleStrategy</span> <span class="keyword">implements</span> <span class="title">TravelStrategy</span> </span>&#123;</span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">travelAlgorithm</span><span class="params">()</span> </span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">echo</span> <span class="string">"travelbyBicycle"</span>, <span class="string">"\n"</span>;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line">/**</span><br><span class="line"> *</span><br><span class="line"> *环境类(Context):</span><br><span class="line"> *用一个ConcreteStrategy对象来配置。</span><br><span class="line"> *维护一个对Strategy对象的引用。可定义一个接口来让Strategy访问它的数据。</span><br><span class="line"> *算法解决类，以提供客户选择使用何种解决方案：</span><br><span class="line"><span class="php"> */</span></span><br><span class="line"><span class="php"><span class="class"><span class="keyword">class</span> <span class="title">PersonContext</span> </span>&#123;</span></span><br><span class="line"><span class="php">    <span class="keyword">private</span> $_strategy = <span class="keyword">null</span>;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">(TravelStrategy $travel)</span> </span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">$this</span>-&gt;_strategy = $travel;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line">    /**</span><br><span class="line">     *旅行</span><br><span class="line"><span class="php">     */</span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">setTravelStrategy</span><span class="params">(TravelStrategy $travel)</span> </span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">$this</span>-&gt;_strategy = $travel;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line">    /**</span><br><span class="line">     *旅行</span><br><span class="line"><span class="php">     */</span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">travel</span><span class="params">()</span> </span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;_strategy-&gt;travelAlgorithm();</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php"><span class="comment">//乘坐火车旅行</span></span></span><br><span class="line"><span class="php">$person = <span class="keyword">new</span> PersonContext(<span class="keyword">new</span> TrainStrategy());</span></span><br><span class="line"><span class="php">$person-&gt;travel();</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php"><span class="comment">//改骑自行车</span></span></span><br><span class="line"><span class="php">$person-&gt;setTravelStrategy(<span class="keyword">new</span> BicycleStrategy());</span></span><br><span class="line"><span class="php">$person-&gt;travel();</span></span><br></pre></td></tr></table></figure>
+<h2 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h2><blockquote>
+<p>观察者模式(Observer)，当一个对象状态发生变化时，依赖它的对象全部会收到通知，并自动更新。</p>
+</blockquote>
+<h3 id="优缺点-1"><a href="#优缺点-1" class="headerlink" title="优缺点"></a>优缺点</h3><p>优点：观察者和主题之间的耦合度较小；支持广播通信；</p>
+<p>缺点：由于观察者并不知道其它观察者的存在，它可能对改变目标的最终代价一无所知。这可能会引起意外的更新。</p>
+<h3 id="适用场景-4"><a href="#适用场景-4" class="headerlink" title="适用场景"></a>适用场景</h3><ul>
+<li>一个事件发生后，要执行一连串更新操作。传统的编程方式，就是在事件的代码之后直接加入处理的逻辑。当更新的逻辑增多之后，代码会变得难以维护。这种方式是耦合的，侵入式的，增加新的逻辑需要修改事件的主体代码。 </li>
+<li>观察者模式实现了低耦合，非侵入式的通知与更新机制。 </li>
+</ul>
+<h3 id="代码demo-5"><a href="#代码demo-5" class="headerlink" title="代码demo"></a>代码demo</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php"></span></span><br><span class="line">/**</span><br><span class="line"> * 观察者模式</span><br><span class="line"><span class="php"> */</span></span><br><span class="line"><span class="php"></span></span><br><span class="line">/**</span><br><span class="line"> * 抽象主题角色</span><br><span class="line"><span class="php"> */</span></span><br><span class="line"><span class="php"><span class="class"><span class="keyword">interface</span> <span class="title">Subject</span> </span>&#123;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line">    /**</span><br><span class="line">     * 增加一个新的观察者对象</span><br><span class="line">     * @param Observer $observer</span><br><span class="line"><span class="php">     */</span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">attach</span><span class="params">(Observer $observer)</span></span>;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line">    /**</span><br><span class="line">     * 删除一个已注册过的观察者对象</span><br><span class="line">     * @param Observer $observer</span><br><span class="line"><span class="php">     */</span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">detach</span><span class="params">(Observer $observer)</span></span>;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line">    /**</span><br><span class="line">     * 通知所有注册过的观察者对象</span><br><span class="line"><span class="php">     */</span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">notifyObservers</span><span class="params">()</span></span>;</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line">/**</span><br><span class="line"> * 具体主题角色</span><br><span class="line"><span class="php"> */</span></span><br><span class="line"><span class="php"><span class="class"><span class="keyword">class</span> <span class="title">ConcreteSubject</span> <span class="keyword">implements</span> <span class="title">Subject</span> </span>&#123;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">    <span class="keyword">private</span> $_observers;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span> </span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">$this</span>-&gt;_observers = <span class="keyword">array</span>();</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">    <span class="comment">//增加一个新的观察者对象</span></span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">attach</span><span class="params">(Observer $observer)</span> </span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">return</span> array_push(<span class="keyword">$this</span>-&gt;_observers, $observer);</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">    <span class="comment">//删除一个已注册过的观察者对象</span></span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">detach</span><span class="params">(Observer $observer)</span> </span>&#123;</span></span><br><span class="line"><span class="php">        $index = array_search($observer, <span class="keyword">$this</span>-&gt;_observers);</span></span><br><span class="line"><span class="php">        <span class="keyword">if</span> ($index === <span class="keyword">FALSE</span> || ! array_key_exists($index, <span class="keyword">$this</span>-&gt;_observers)) &#123;</span></span><br><span class="line"><span class="php">            <span class="keyword">return</span> <span class="keyword">FALSE</span>;</span></span><br><span class="line"><span class="php">        &#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">        <span class="keyword">unset</span>(<span class="keyword">$this</span>-&gt;_observers[$index]);</span></span><br><span class="line"><span class="php">        <span class="keyword">return</span> <span class="keyword">TRUE</span>;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">    <span class="comment">//通知所有注册过的观察者对象</span></span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">notifyObservers</span><span class="params">()</span> </span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">if</span> (!is_array(<span class="keyword">$this</span>-&gt;_observers)) &#123;</span></span><br><span class="line"><span class="php">            <span class="keyword">return</span> <span class="keyword">FALSE</span>;</span></span><br><span class="line"><span class="php">        &#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">        <span class="keyword">foreach</span> (<span class="keyword">$this</span>-&gt;_observers <span class="keyword">as</span> $observer) &#123;</span></span><br><span class="line"><span class="php">            $observer-&gt;update();</span></span><br><span class="line"><span class="php">        &#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">        <span class="keyword">return</span> <span class="keyword">TRUE</span>;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line">/**</span><br><span class="line"> * 抽象观察者角色</span><br><span class="line"><span class="php"> */</span></span><br><span class="line"><span class="php"><span class="class"><span class="keyword">interface</span> <span class="title">Observer</span> </span>&#123;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line">    /**</span><br><span class="line">     * 更新方法</span><br><span class="line"><span class="php">     */</span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">update</span><span class="params">()</span></span>;</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php"><span class="class"><span class="keyword">class</span> <span class="title">ConcreteObserver</span> <span class="keyword">implements</span> <span class="title">Observer</span> </span>&#123;</span></span><br><span class="line"><span class="php">    <span class="comment">//观察者的名称</span></span></span><br><span class="line"><span class="php">    <span class="keyword">private</span> $_name;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($name)</span> </span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">$this</span>-&gt;_name = $name;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">    <span class="comment">//更新方法</span></span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">update</span><span class="params">()</span> </span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">echo</span> <span class="string">'Observer'</span>, <span class="keyword">$this</span>-&gt;_name, <span class="string">" has notified.\n"</span>;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php"><span class="comment">//实例化类：</span></span></span><br><span class="line"><span class="php">$subject = <span class="keyword">new</span> ConcreteSubject();</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php"><span class="comment">/* 添加第一个观察者 */</span></span></span><br><span class="line"><span class="php">$observer1 = <span class="keyword">new</span> ConcreteObserver(<span class="string">'Martin'</span>);</span></span><br><span class="line"><span class="php">$subject-&gt;attach($observer1);</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php"><span class="keyword">echo</span> <span class="string">"\n The First notify:\n"</span>;</span></span><br><span class="line"><span class="php">$subject-&gt;notifyObservers();</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php"><span class="comment">/* 添加第二个观察者 */</span></span></span><br><span class="line"><span class="php">$observer2 = <span class="keyword">new</span> ConcreteObserver(<span class="string">'phppan'</span>);</span></span><br><span class="line"><span class="php">$subject-&gt;attach($observer2);</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php"><span class="keyword">echo</span> <span class="string">"\n The Second notify:\n"</span>;</span></span><br><span class="line"><span class="php">$subject-&gt;notifyObservers();</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php"><span class="comment">/* 删除第一个观察者 */</span></span></span><br><span class="line"><span class="php">$subject-&gt;detach($observer1);</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php"><span class="keyword">echo</span> <span class="string">"\n The Third notify:\n"</span>;</span></span><br><span class="line"><span class="php">$subject-&gt;notifyObservers();</span></span><br></pre></td></tr></table></figure>
+
+        </div>
+
+        
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/">php</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/02/25/设计模式/设计模式/&title=《设计模式》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/02/25/设计模式/设计模式/&title=《设计模式》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/02/25/设计模式/设计模式/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《设计模式》 — Zfd's blog.&url=https://zfd.github.io/2018/02/25/设计模式/设计模式/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/02/25/设计模式/设计模式/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/03/01/笔记/PHP核心技术与最佳实践/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">PHP核心技术与最佳实践</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/02/08/服务器/nginx、CGI、fastCGI、php-cgi、php-fpm/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">nginx、CGI、fastCGI、php-cgi、php-fpm</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <!-- todo hide
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    -->
+    <div class="bottom">
+        <p><span>zfd &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/02/25/设计模式/设计模式/&title=《设计模式》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/02/25/设计模式/设计模式/&title=《设计模式》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/02/25/设计模式/设计模式/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《设计模式》 — Zfd's blog.&url=https://zfd.github.io/2018/02/25/设计模式/设计模式/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/02/25/设计模式/设计模式/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLElEQVR42u3aQW7jMAwF0Nz/0h6gqwIdp59kUiDU0ypwa1lPC4Ii9XjE4/oaP598f349HXfv3s3weMfAwMD4WEby+bupkwVVF9rbGgwMjBMY+XS94JjPkG8fBgYGxt10eTDNw/Tzb2FgYGBMAm4vNFffxcDAwMgPsb1P5mnfpISHgYGxm1FtDPzl7zf2NzAwMD6EcRVH/lYv4DZXhYGBsZrxPEWLjo5BYlf93UxAMTAwljJ6YTQJr8nnk0Ns9C4GBsYBjDy9S/7ztfgoucTAwDiYUb3IlfAm7YHbNWBgYKxmVFuP1UJbNbBWm6AYGBjnMCZLn5TJeltTJmFgYKxgzJeVp3e9JLLQwsTAwFjHqL6QHy+j3mlQhktWiIGBsZvRK3hNrnlVD6iFOTEwMI5kTK5zVamTKxoYGBi7GdVrDZPkLz8e55v7nwwXAwNjNaNXdKseRKuluvI1CwwMjKWMpGWYp33V5O8FzzEwMFYzJmE0D44vCKlJ8Q4DA2MpY3I0zZsKkxQwaipgYGAcwOg1MvNrFu84Ht82LzEwMNYxehcmqiljr1XZzHAxMDDWMa7iqIbCfHG9NsMvVUMMDIwVjOrUk0Np9dSZN1kxMDBOYCRBNi/6Vxc0aUiUs1cMDIwPZ+QXKSZluCRw9+r/GBgYGHm61nu3msliYGBgVBucvb/2LnDczoyBgXEAI0n+JtcmJg3OQmqIgYGxlNFrDOQLqm5EkiAmm4WBgbGC8Q/xeQ8sYTxiogAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.7.2"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.7.2" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

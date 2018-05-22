@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>select、poll、epoll | Zfd&#39;s blog.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    
+    <meta name="keywords" content="epoll,select,poll">
+    <meta name="description" content="相关概念一个IO操作流程一个read（O）操作的2个阶段：  对于socket，等待从网络收到数据，并且在数据到达后，复制数据到内核缓冲区； 从内核缓冲区复制数据到用户进程缓冲区，以便进程处理。  同步、异步是一种通信机制，关注的是IO操作的结果返回方式。  同步：提交请求-&amp;gt;等待服务器回应-&amp;gt;处理完毕，中间一直等待； 异步：提交请求-&amp;gt;处理其他事情，服务器回应-&amp;gt;通知回调">
+<meta name="keywords" content="epoll,select,poll">
+<meta property="og:type" content="article">
+<meta property="og:title" content="select、poll、epoll">
+<meta property="og:url" content="https://zfd.github.io/2018/03/30/服务器/select、poll、epoll/index.html">
+<meta property="og:site_name" content="Zfd&#39;s blog.">
+<meta property="og:description" content="相关概念一个IO操作流程一个read（O）操作的2个阶段：  对于socket，等待从网络收到数据，并且在数据到达后，复制数据到内核缓冲区； 从内核缓冲区复制数据到用户进程缓冲区，以便进程处理。  同步、异步是一种通信机制，关注的是IO操作的结果返回方式。  同步：提交请求-&amp;gt;等待服务器回应-&amp;gt;处理完毕，中间一直等待； 异步：提交请求-&amp;gt;处理其他事情，服务器回应-&amp;gt;通知回调">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-22T09:48:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="select、poll、epoll">
+<meta name="twitter:description" content="相关概念一个IO操作流程一个read（O）操作的2个阶段：  对于socket，等待从网络收到数据，并且在数据到达后，复制数据到内核缓冲区； 从内核缓冲区复制数据到用户进程缓冲区，以便进程处理。  同步、异步是一种通信机制，关注的是IO操作的结果返回方式。  同步：提交请求-&amp;gt;等待服务器回应-&amp;gt;处理完毕，中间一直等待； 异步：提交请求-&amp;gt;处理其他事情，服务器回应-&amp;gt;通知回调">
+    
+        <link rel="alternate" type="application/atom+xml" title="Zfd&#39;s blog." href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/icon_trans.png">
+    <link rel="stylesheet" href="/css/style.css?v=1.7.2">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/icon.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zfd</h5>
+          <a href="mailto:zf.dong@qq.com" title="zf.dong@qq.com" class="mail">zf.dong@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                首页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zfd" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">select、poll、epoll</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <!-- todo hide -->
+        <a href="javascript:;" style="display:none;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">select、poll、epoll</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-03-30T14:39:42.000Z" itemprop="datePublished" class="page-time">
+  2018-03-30
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/服务器/">服务器</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>目录</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#相关概念"><span class="post-toc-number">1.</span> <span class="post-toc-text">相关概念</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一个IO操作流程"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">一个IO操作流程</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#同步、异步"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">同步、异步</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#阻塞、非阻塞"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">阻塞、非阻塞</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#用户态、内核态"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">用户态、内核态</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#文件描述符（file-descriptor，简称fd）"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">文件描述符（file descriptor，简称fd）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#回调函数（callback）"><span class="post-toc-number">1.6.</span> <span class="post-toc-text">回调函数（callback）</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#网络通信模型"><span class="post-toc-number">2.</span> <span class="post-toc-text">网络通信模型</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#IO多路复用"><span class="post-toc-number">3.</span> <span class="post-toc-text">IO多路复用</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#select"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">select</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#函数"><span class="post-toc-number">3.1.1.</span> <span class="post-toc-text">函数</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#缺点"><span class="post-toc-number">3.1.2.</span> <span class="post-toc-text">缺点</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#poll"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">poll</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#函数-1"><span class="post-toc-number">3.2.1.</span> <span class="post-toc-text">函数</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#epoll"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">epoll</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#函数-2"><span class="post-toc-number">3.3.1.</span> <span class="post-toc-text">函数</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#解决select、poll的缺点"><span class="post-toc-number">3.3.2.</span> <span class="post-toc-text">解决select、poll的缺点</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#工作模式"><span class="post-toc-number">3.3.3.</span> <span class="post-toc-text">工作模式</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#总结"><span class="post-toc-number">3.3.4.</span> <span class="post-toc-text">总结</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-服务器/select、poll、epoll"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">select、poll、epoll</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-03-30 14:39:42" datetime="2018-03-30T14:39:42.000Z"  itemprop="datePublished">2018-03-30</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/服务器/">服务器</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h2><h3 id="一个IO操作流程"><a href="#一个IO操作流程" class="headerlink" title="一个IO操作流程"></a>一个IO操作流程</h3><p>一个read（O）操作的2个阶段：</p>
+<ul>
+<li>对于socket，等待从网络收到数据，并且在数据到达后，复制数据到内核缓冲区；</li>
+<li>从内核缓冲区复制数据到用户进程缓冲区，以便进程处理。</li>
+</ul>
+<h3 id="同步、异步"><a href="#同步、异步" class="headerlink" title="同步、异步"></a>同步、异步</h3><p>是一种通信机制，关注的是IO操作的结果返回方式。</p>
+<ul>
+<li>同步：提交请求-&gt;等待服务器回应-&gt;处理完毕，中间一直等待；</li>
+<li>异步：提交请求-&gt;处理其他事情，服务器回应-&gt;通知回调-&gt;处理完毕。</li>
+</ul>
+<h3 id="阻塞、非阻塞"><a href="#阻塞、非阻塞" class="headerlink" title="阻塞、非阻塞"></a>阻塞、非阻塞</h3><p>是一种调用机制，关注的是IO操作的执行状态。</p>
+<ul>
+<li>阻塞：调用方等待IO操作完成后返回；</li>
+<li>非阻塞：调用方不需要等待IO操作的完成就立即返回。</li>
+</ul>
+<h3 id="用户态、内核态"><a href="#用户态、内核态" class="headerlink" title="用户态、内核态"></a>用户态、内核态</h3><blockquote>
+<p>内核态：控制计算机硬件资源，并提供上层应用程序运行的环境；<br>用户态：上层应用程序的活动空间，应用程序运行必须依赖内核提供的资源，如CPU资源、存储资源、I/O资源等。</p>
+</blockquote>
+<h3 id="文件描述符（file-descriptor，简称fd）"><a href="#文件描述符（file-descriptor，简称fd）" class="headerlink" title="文件描述符（file descriptor，简称fd）"></a>文件描述符（file descriptor，简称fd）</h3><blockquote>
+<p>在Linux下面一切皆文件，fd是内核为文件所创的索引，所有I/O操作都要调用fd来执行。</p>
+</blockquote>
+<h3 id="回调函数（callback）"><a href="#回调函数（callback）" class="headerlink" title="回调函数（callback）"></a>回调函数（callback）</h3><blockquote>
+<p>回调函数就是一个通过函数指针调用的函数。</p>
+</blockquote>
+<ul>
+<li>定义一个回调函数；</li>
+<li>提供函数实现的一方在初始化的时候，将回调函数的函数指针注册给调用者；</li>
+<li>当特定的事件或条件发生的时候，调用者使用函数指针调用回调函数对事件进行处理。</li>
+</ul>
+<h2 id="网络通信模型"><a href="#网络通信模型" class="headerlink" title="网络通信模型"></a>网络通信模型</h2><ul>
+<li><p>阻塞式IO</p>
+</li>
+<li><p>非阻塞式IO</p>
+</li>
+<li><p>IO多路复用</p>
+</li>
+<li><p>信号驱动IO</p>
+</li>
+<li><p>异步IO</p>
+</li>
+</ul>
+<h2 id="IO多路复用"><a href="#IO多路复用" class="headerlink" title="IO多路复用"></a>IO多路复用</h2><blockquote>
+<p>I/O多路复用就通过一种机制，可以监视多个描述符，一旦某个描述符就绪（一般是读就绪或者写就绪），能够通知程序进行相应的读写操作。</p>
+</blockquote>
+<h3 id="select"><a href="#select" class="headerlink" title="select"></a>select</h3><h4 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/select.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 参数：</span></span><br><span class="line"><span class="comment"> * maxfdp: 待监听的最大fd数+1。</span></span><br><span class="line"><span class="comment"> * readSet：待监听的可读fd集合</span></span><br><span class="line"><span class="comment"> * writeSet：待监听的可写fd集合</span></span><br><span class="line"><span class="comment"> * exceptSet：待监听的异常fd集合</span></span><br><span class="line"><span class="comment"> * timeval：指定超时，NULL为一直等到，0为不等待</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 返回：</span></span><br><span class="line"><span class="comment"> * 就绪描述符的数目，超时返回0，出错返回-1，</span></span><br><span class="line"><span class="comment"> * 正常返回后，对应fd_set会设置相关满足条件的fd。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">select</span><span class="params">(<span class="keyword">int</span> maxfdp, fd_set *readset, fd_set *writeset, fd_set *exceptset, <span class="keyword">const</span> struct timeval *timeout)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//fd_set相关操作</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_ZERO</span><span class="params">(fd_set *fdset)</span></span>; <span class="comment">//清空集合</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_SET</span><span class="params">(<span class="keyword">int</span> fd, fd_set *fdset)</span></span>;<span class="comment">//将一个给定的文件描述符加入集合之中</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">FD_CLR</span><span class="params">(<span class="keyword">int</span> fd, fd_set *fdset)</span></span>;<span class="comment">//将一个给定的文件描述符从集合中删除</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">FD_ISSET</span><span class="params">(<span class="keyword">int</span> fd, fd_set *fdset)</span></span>;<span class="comment">//检查集合中指定的文件描述符是否可以读写</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//相关结构</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">timeval</span> &#123;</span></span><br><span class="line">    <span class="keyword">long</span> tv_sec;<span class="comment">//seconds</span></span><br><span class="line">    <span class="keyword">long</span> tv_usec;<span class="comment">//microseconds</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __NFDBITS (8 * sizeof(unsigned long)) <span class="comment">//32位编译器，unsigned long为4个字节</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __FD_SETSIZE 1024</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __FDSET_LONGS (__FD_SETSIZE/__NFDBITS)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> fds_bits [__FDSET_LONGS];</span><br><span class="line">&#125; __kernel_fd_set;</span><br></pre></td></tr></table></figure>
+<h4 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h4><ul>
+<li>单个进程监听的fd数量有限，最多为1024；（能改，但是改后影响效率）；</li>
+<li>每次调用select，都需要遍历所有fd，才能发现哪些发生了事件，效率慢；</li>
+<li>内存复制开销大，需要从用户空间、内核空间来回拷贝fd_set；</li>
+</ul>
+<h3 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h3><p>poll的实现和select非常相似，只是描述fd集合的方式不同，poll使用pollfd结构而不是select的fd_set结构，其他的都差不多。</p>
+<p>就少了select的fd数量限制，其他缺点仍存在。</p>
+<h4 id="函数-1"><a href="#函数-1" class="headerlink" title="函数"></a>函数</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta"># <span class="meta-keyword">include</span> <span class="meta-string">&lt;poll.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">poll</span><span class="params">(struct pollfd * fds, <span class="keyword">unsigned</span> <span class="keyword">int</span> nfds, <span class="keyword">int</span> timeout)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//结构</span></span><br><span class="line">truct pollfd &#123;</span><br><span class="line">    <span class="keyword">int</span> fd;<span class="comment">//文件描述符</span></span><br><span class="line">    <span class="keyword">short</span> events;<span class="comment">//等待的事件</span></span><br><span class="line">    <span class="keyword">short</span> revents;<span class="comment">//实际发生了的事件</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h3><h4 id="函数-2"><a href="#函数-2" class="headerlink" title="函数"></a>函数</h4><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建epoll句柄，返回值为句柄，即epfd</span></span><br><span class="line">int epoll_create(int size)；</span><br><span class="line"></span><br><span class="line"><span class="comment">//注册要监听的事件类型</span></span><br><span class="line">int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event)；</span><br><span class="line"></span><br><span class="line"><span class="comment">//等待事件的发生</span></span><br><span class="line">int epoll_wait(int epfd, struct epoll_event * events, int maxevents, int timeout)；</span><br></pre></td></tr></table></figure>
+<h4 id="解决select、poll的缺点"><a href="#解决select、poll的缺点" class="headerlink" title="解决select、poll的缺点"></a>解决select、poll的缺点</h4><ul>
+<li>epoll_create，提前准备好相关资源（开辟内核缓冲区，创建红黑树和就绪链表），注册事件只是往里面添加新的fd，所支持的fd上限是最大可以打开文件的数目；</li>
+<li>epoll_ctl，注册事件时，就会把fd拷贝进内核，保证每个fd只拷贝一次；</li>
+<li>epoll_ctl，注册事件时，为每个fd指定一个回调函数，当设备就绪，唤醒队列上的等待者时，就会调用回调函数，把就绪的fd加入一个就绪链表；</li>
+<li>epoll_wait，等待事件的发生，只需要查看就绪链表中有没有就绪的fd，并且返回的fd是通过mmap让内核和用户空间共享同一块内存实现传递的，减少了不必要的拷贝；</li>
+</ul>
+<h4 id="工作模式"><a href="#工作模式" class="headerlink" title="工作模式"></a>工作模式</h4><ul>
+<li>LT模式（level trigger，默认模式）：当epoll_wait检测到描述符事件发生并将此事件通知应用程序，应用程序可以不立即处理该事件。下次调用epoll_wait时，会再次响应应用程序并通知此事件；</li>
+<li>ET模式（edge trigger）：当epoll_wait检测到描述符事件发生并将此事件通知应用程序，应用程序必须立即处理该事件。如果不处理，下次调用epoll_wait时，不会再次响应应用程序并通知此事件。</li>
+</ul>
+<p>ET模式在很大程度上减少了epoll事件被重复触发的次数，因此效率要比LT模式高。epoll工作在ET模式的时候，必须使用非阻塞套接口，以避免由于一个文件句柄的阻塞读/阻塞写操作把处理多个文件描述符的任务饿死。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>epoll比select和poll高效的原因主要有：</p>
+<ul>
+<li>减少了用户态和内核态之间的fd拷贝； </li>
+<li>减少了对就绪fd的遍历；</li>
+</ul>
+
+        </div>
+
+        
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/epoll/">epoll</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/poll/">poll</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/select/">select</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/03/30/服务器/select、poll、epoll/&title=《select、poll、epoll》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/03/30/服务器/select、poll、epoll/&title=《select、poll、epoll》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/03/30/服务器/select、poll、epoll/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《select、poll、epoll》 — Zfd's blog.&url=https://zfd.github.io/2018/03/30/服务器/select、poll、epoll/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/03/30/服务器/select、poll、epoll/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/04/10/概念/进程、进程控制块、进程上下文/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">进程、进程控制块、进程上下文</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/03/23/算法/简单查找算法/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">简单查找算法</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <!-- todo hide
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    -->
+    <div class="bottom">
+        <p><span>zfd &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/03/30/服务器/select、poll、epoll/&title=《select、poll、epoll》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/03/30/服务器/select、poll、epoll/&title=《select、poll、epoll》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/03/30/服务器/select、poll、epoll/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《select、poll、epoll》 — Zfd's blog.&url=https://zfd.github.io/2018/03/30/服务器/select、poll、epoll/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/03/30/服务器/select、poll、epoll/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACsklEQVR42u3awXIiMQwEUP7/p9nzFkvoluwktfXmRCUw+M3BFi09HvH1fLle//71Z19fv3vPu099/S2rCw8PD2+99ISRvE6Qz/LK14yHh4d3m9cuKNmy8608eZSzAwYPDw/v9/A2+GJbx8PDw/sveLNYYXaHTeGOh4eHd5uX/Phvo4SzB8/1rAUPDw+vq1rrsOBnX1/p7+Hh4eGtu+p5TDALGmYHSbFaPDw8vAu8fMPdjFvl9z91Hzw8PLzbvGQLzoPdU9t623Irim88PDy8NW9TQM8YSVHeRsZv14aHh4d3lNcWsrNwIR+fahtdqxgCDw8Pb5vH1gOpOTJZ7g908PDw8PAujAW0h0ce8uahxubYwMPDw7vBS5a+L4tni541yXYfwMPDw0t5eaMrj1xnTbL94fTX+/Hw8PAu8PKhpSIwjRtX7cBBu+fj4eHh3eDlpXBbds/GAtqo4sO34OHh4V3gJfFoG7a2IwizMYXiQePh4eEd5eXhaTIu0Da68nZa0u6qO3t4eHh4I14bm+YDAXl5vRntilaIh4eHd5mXt6zacYH2MW1GXfHw8PDu8U4NmLbbfdskGwbKeHh4eN/C22Da8dbN1h89UDw8PLwLvLbNP1tQG+ZuRhDw8PDwvofXhrPt9n12u2/vj4eHh3ePl1A3I1OzSHf2yIaJCx4eHt6I145AtWXu/kG0UQgeHh7ebV6+Qc9GpmaH0Ca2wMPDwzvLe5bXqWUli26PgX/8Fw8PD+8Cr91wZ0dIG8Imh9Zs0AEPDw/vFC8/DNpCfFYQt2X6h+MKDw8P7xovzz/z4jtf9GNxfSj38fDw8H4xL2+D5QudNdiuHAx4eHh4a14e6SZDCXnzrBi3wsPDw7vMmzW9ZiFFsoY2sDiQteDh4eHFvP0P/jbGPYU5FWfg4eHhxd/+B4g17gMmLutfAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.7.2"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.7.2" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

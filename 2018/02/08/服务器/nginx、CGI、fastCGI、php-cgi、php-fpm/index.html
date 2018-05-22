@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>nginx、CGI、fastCGI、php-cgi、php-fpm | Zfd&#39;s blog.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    
+    <meta name="keywords" content="nginx,CGI,fastCGI,php-fpm">
+    <meta name="description" content="名词解释 nginx：web server，内容分发者，只能处理静态文件，动态脚本只能交给php自己处理。 CGI：通用网关接口（common gateway interface），是 Web Server 与 Web Application 之间数据交换的一种协议。 FastCGI：同 CGI，是一种通信协议，但比 CGI 在效率上做了一些优化。同样，SCGI 协议与 FastCGI 类似。 P">
+<meta name="keywords" content="nginx,CGI,fastCGI,php-fpm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nginx、CGI、fastCGI、php-cgi、php-fpm">
+<meta property="og:url" content="https://zfd.github.io/2018/02/08/服务器/nginx、CGI、fastCGI、php-cgi、php-fpm/index.html">
+<meta property="og:site_name" content="Zfd&#39;s blog.">
+<meta property="og:description" content="名词解释 nginx：web server，内容分发者，只能处理静态文件，动态脚本只能交给php自己处理。 CGI：通用网关接口（common gateway interface），是 Web Server 与 Web Application 之间数据交换的一种协议。 FastCGI：同 CGI，是一种通信协议，但比 CGI 在效率上做了一些优化。同样，SCGI 协议与 FastCGI 类似。 P">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-22T09:48:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="nginx、CGI、fastCGI、php-cgi、php-fpm">
+<meta name="twitter:description" content="名词解释 nginx：web server，内容分发者，只能处理静态文件，动态脚本只能交给php自己处理。 CGI：通用网关接口（common gateway interface），是 Web Server 与 Web Application 之间数据交换的一种协议。 FastCGI：同 CGI，是一种通信协议，但比 CGI 在效率上做了一些优化。同样，SCGI 协议与 FastCGI 类似。 P">
+    
+        <link rel="alternate" type="application/atom+xml" title="Zfd&#39;s blog." href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/icon_trans.png">
+    <link rel="stylesheet" href="/css/style.css?v=1.7.2">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/icon.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zfd</h5>
+          <a href="mailto:zf.dong@qq.com" title="zf.dong@qq.com" class="mail">zf.dong@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                首页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zfd" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">nginx、CGI、fastCGI、php-cgi、php-fpm</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <!-- todo hide -->
+        <a href="javascript:;" style="display:none;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">nginx、CGI、fastCGI、php-cgi、php-fpm</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-02-07T17:12:45.000Z" itemprop="datePublished" class="page-time">
+  2018-02-07
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/服务器/">服务器</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>目录</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#名词解释"><span class="post-toc-number">1.</span> <span class="post-toc-text">名词解释</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#fastCGI"><span class="post-toc-number">2.</span> <span class="post-toc-text">fastCGI</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#作用"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">作用</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#php-fpm"><span class="post-toc-number">3.</span> <span class="post-toc-text">php-fpm</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#运行模式"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">运行模式</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#运行原理"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">运行原理</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#nginx，php-fpm工作流程"><span class="post-toc-number">4.</span> <span class="post-toc-text">nginx，php-fpm工作流程</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-服务器/nginx、CGI、fastCGI、php-cgi、php-fpm"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">nginx、CGI、fastCGI、php-cgi、php-fpm</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-02-07 17:12:45" datetime="2018-02-07T17:12:45.000Z"  itemprop="datePublished">2018-02-07</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/服务器/">服务器</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h2><ul>
+<li><code>nginx</code>：web server，内容分发者，只能处理静态文件，动态脚本只能交给php自己处理。</li>
+<li><code>CGI</code>：通用网关接口（common gateway interface），是 Web Server 与 Web Application 之间数据交换的一种协议。</li>
+<li><code>FastCGI</code>：同 CGI，是一种通信协议，但比 CGI 在效率上做了一些优化。同样，SCGI 协议与 FastCGI 类似。</li>
+<li><code>PHP-CGI</code>：是 PHP（Web Application）对 Web Server 提供的 CGI 协议的接口程序。</li>
+<li><code>PHP-FPM</code>：是 PHP（Web Application）对 Web Server 提供的 FastCGI 协议的接口程序，它直接管理多个 PHP-CGI 进程。</li>
+</ul>
+<h2 id="fastCGI"><a href="#fastCGI" class="headerlink" title="fastCGI"></a>fastCGI</h2><p>fastCGI可以理解为一个常驻型的cgi，其主要行为是将CGI解释器进程保持在内存中，并因此获得较高的性能。</p>
+<h3 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h3><ul>
+<li>解决cgi并发重复fork的问题；</li>
+<li>支持分布式运算；</li>
+</ul>
+<h2 id="php-fpm"><a href="#php-fpm" class="headerlink" title="php-fpm"></a>php-fpm</h2><p>就是 php-cgi 的进程管理器，修改php.ini后，可以重新fork php-cgi进程，实现平滑重启。</p>
+<h3 id="运行模式"><a href="#运行模式" class="headerlink" title="运行模式"></a>运行模式</h3><ul>
+<li>static：静态分配，启动时分配固定的worker进程；</li>
+<li>ondemand：按需分配，当收到用户请求时fork worker进程；</li>
+<li>dynamic：动态分配，启动时分配固定进程，用户请求增加，按照设定范围浮动；</li>
+</ul>
+<h3 id="运行原理"><a href="#运行原理" class="headerlink" title="运行原理"></a>运行原理</h3><p>一个master进程，管理多个worker进程；</p>
+<p>master进程：</p>
+<ol>
+<li>初始化cgi；</li>
+<li>初始化php环境；</li>
+<li>初始化php-fpm；</li>
+<li>运行，主进程fork子进程，主进程阻塞，事件循环；</li>
+</ol>
+<p>worker进程：</p>
+<ol>
+<li>接收请求；</li>
+<li>处理请求；</li>
+<li>返回请求结果；</li>
+</ol>
+<h2 id="nginx，php-fpm工作流程"><a href="#nginx，php-fpm工作流程" class="headerlink" title="nginx，php-fpm工作流程"></a>nginx，php-fpm工作流程</h2><figure class="highlight 1c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"> www.example.com</span><br><span class="line">        <span class="string">|</span></span><br><span class="line">        <span class="string">|</span></span><br><span class="line">      Nginx</span><br><span class="line">        <span class="string">|</span></span><br><span class="line">        <span class="string">|</span></span><br><span class="line">路由到www.example.com/index.php</span><br><span class="line">        <span class="string">|</span></span><br><span class="line">        <span class="string">|</span></span><br><span class="line">加载nginx的fast-cgi模块</span><br><span class="line">        <span class="string">|</span></span><br><span class="line">        <span class="string">|</span></span><br><span class="line">www.example.com/index.php请求到达<span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">9000</span>（fast-cgi协议）</span><br><span class="line">        <span class="string">|</span></span><br><span class="line">        <span class="string">|</span></span><br><span class="line">php-fpm 监听<span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">9000</span></span><br><span class="line">        <span class="string">|</span></span><br><span class="line">        <span class="string">|</span></span><br><span class="line">php-fpm 接收到请求，启用worker进程处理请求</span><br><span class="line">        <span class="string">|</span></span><br><span class="line">        <span class="string">|</span></span><br><span class="line">php-fpm 处理完请求，返回给nginx</span><br><span class="line">        <span class="string">|</span></span><br><span class="line">        <span class="string">|</span></span><br><span class="line">nginx将结果通过http返回给浏览器</span><br></pre></td></tr></table></figure>
+
+        </div>
+
+        
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CGI/">CGI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fastCGI/">fastCGI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nginx/">nginx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php-fpm/">php-fpm</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/02/08/服务器/nginx、CGI、fastCGI、php-cgi、php-fpm/&title=《nginx、CGI、fastCGI、php-cgi、php-fpm》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/02/08/服务器/nginx、CGI、fastCGI、php-cgi、php-fpm/&title=《nginx、CGI、fastCGI、php-cgi、php-fpm》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/02/08/服务器/nginx、CGI、fastCGI、php-cgi、php-fpm/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《nginx、CGI、fastCGI、php-cgi、php-fpm》 — Zfd's blog.&url=https://zfd.github.io/2018/02/08/服务器/nginx、CGI、fastCGI、php-cgi、php-fpm/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/02/08/服务器/nginx、CGI、fastCGI、php-cgi、php-fpm/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/02/25/设计模式/设计模式/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">设计模式</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/02/04/服务器/代理/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">代理</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <!-- todo hide
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    -->
+    <div class="bottom">
+        <p><span>zfd &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/02/08/服务器/nginx、CGI、fastCGI、php-cgi、php-fpm/&title=《nginx、CGI、fastCGI、php-cgi、php-fpm》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/02/08/服务器/nginx、CGI、fastCGI、php-cgi、php-fpm/&title=《nginx、CGI、fastCGI、php-cgi、php-fpm》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/02/08/服务器/nginx、CGI、fastCGI、php-cgi、php-fpm/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《nginx、CGI、fastCGI、php-cgi、php-fpm》 — Zfd's blog.&url=https://zfd.github.io/2018/02/08/服务器/nginx、CGI、fastCGI、php-cgi、php-fpm/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/02/08/服务器/nginx、CGI、fastCGI、php-cgi、php-fpm/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAADJElEQVR42u3aUXKrQAwEwNz/0s4BXOCRRFJGNF+p9xbY3h9ZGn5+4uv1diX//v6E97vO1xytP3rvxRc2Njb2Tdiv0+uIkTwhv/f8X/L1iQUbGxt7K/v8BUnJmWwxeUK17H3YJzY2NvaD2Qm+iknuylsUbGxsbOxkQ5NxUu9/Eyo2Njb2k9nJYKg6vs8HT+eDqt4+L5ulYWNjY389O09Fv//vP8m3sbGxsb+Y/Wpdf3FA+dbz0ni4f2xsbOxF7Mnmej/0kyanGuv22idsbGzsHezebXkZmxSbathc2CE2Njb2Ova8qejFwNXn94IBbGxs7N3sXvuRPKFaYP7/mLCxsbF3sKthwHyQVG1v8o+BCqUXGxsbexE7KR75a3qvz4viteuxsbGxd7Dz+DY/gupz8ih3VK6O6jY2Njb2zdmTcU+O722oRy3Hw9jY2Ng3Z1eR1TI2uXfeGmFjY2M/hz1pJ5JjyuPYXu1NWpfDYAAbGxv75uz8c5lyZxMca34Evdk+NjY29hPY1RckBax6HNU2pjrAOvxYBxsbG3sFu9p+VIvQ+XOuamB6TQs2Njb2DvY8xK0eULX9qEa85UwbGxsb++bsaiGphrLnW88LW6/NwMbGxn4CO/kR3ys2849+qodS2Dk2Njb2InZvK71IIClO1XBi8nxsbGzsHex8KNNrLaoHV/0Ep1lusbGxsdexqz/re5Ft/sZq0FsOErCxsbGXsnslp9dI9Ib7eZz84WiwsbGxF7GTEf/kM5rqASWY/L1Ryo2NjY19c3Z1oN8b7k/ih15J+/A3NjY29iJ28rP+qhgg/8Snt776NGxsbOwd7PmIP/+kpjfQz9fngQQ2Njb2JvakLE3KVS9IKMzGkpXY2NjYK9iv4lX9fCchTdbnBRUbGxt7Kzu/8vFNEiTM25Je3IuNjY29lV0tWvmnM3mJynfSixYOg15sbGzsRexqYciHPnlJ661PkB+yEWxsbOzHsK+NAa4aSzWjC2xsbOxHsvNothfcVhuVXlSMjY2NvZXdC3fzeCApPznygnuxsbGxF7HzoHdUMFpvmaxPAgNsbGzsm7N/Aag2ZBddgjTAAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.7.2"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.7.2" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

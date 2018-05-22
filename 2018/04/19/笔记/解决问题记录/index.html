@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>解决问题记录 | Zfd&#39;s blog.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    
+    <meta name="keywords" content="node">
+    <meta name="description" content="网站或接口相应时间长，应该怎么排查？引用文件问题浏览器F12，看看哪个文件时间长，可以排查有可能是css、js引用了一些被墙住的地址，一直请求不到，所以时间很久。 解决：相关地方注释掉、引用本地的。 接口问题可以写个脚本内网访问一下接口，看看时间，时间长的就追踪到具体哪个业务慢。 解决：不是mysql问题，就业务逻辑优化；mysql问题可以找sql语句去explain一下，针对性优化；数据量大可以">
+<meta name="keywords" content="node">
+<meta property="og:type" content="article">
+<meta property="og:title" content="解决问题记录">
+<meta property="og:url" content="https://zfd.github.io/2018/04/19/笔记/解决问题记录/index.html">
+<meta property="og:site_name" content="Zfd&#39;s blog.">
+<meta property="og:description" content="网站或接口相应时间长，应该怎么排查？引用文件问题浏览器F12，看看哪个文件时间长，可以排查有可能是css、js引用了一些被墙住的地址，一直请求不到，所以时间很久。 解决：相关地方注释掉、引用本地的。 接口问题可以写个脚本内网访问一下接口，看看时间，时间长的就追踪到具体哪个业务慢。 解决：不是mysql问题，就业务逻辑优化；mysql问题可以找sql语句去explain一下，针对性优化；数据量大可以">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-22T09:48:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="解决问题记录">
+<meta name="twitter:description" content="网站或接口相应时间长，应该怎么排查？引用文件问题浏览器F12，看看哪个文件时间长，可以排查有可能是css、js引用了一些被墙住的地址，一直请求不到，所以时间很久。 解决：相关地方注释掉、引用本地的。 接口问题可以写个脚本内网访问一下接口，看看时间，时间长的就追踪到具体哪个业务慢。 解决：不是mysql问题，就业务逻辑优化；mysql问题可以找sql语句去explain一下，针对性优化；数据量大可以">
+    
+        <link rel="alternate" type="application/atom+xml" title="Zfd&#39;s blog." href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/icon_trans.png">
+    <link rel="stylesheet" href="/css/style.css?v=1.7.2">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/icon.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zfd</h5>
+          <a href="mailto:zf.dong@qq.com" title="zf.dong@qq.com" class="mail">zf.dong@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                首页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zfd" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">解决问题记录</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <!-- todo hide -->
+        <a href="javascript:;" style="display:none;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">解决问题记录</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-04-18T22:09:18.000Z" itemprop="datePublished" class="page-time">
+  2018-04-18
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/笔记/">笔记</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>目录</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#网站或接口相应时间长，应该怎么排查？"><span class="post-toc-number">1.</span> <span class="post-toc-text">网站或接口相应时间长，应该怎么排查？</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#引用文件问题"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">引用文件问题</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#接口问题"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">接口问题</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#网络问题"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">网络问题</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#服务器问题"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">服务器问题</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-笔记/解决问题记录"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">解决问题记录</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-04-18 22:09:18" datetime="2018-04-18T22:09:18.000Z"  itemprop="datePublished">2018-04-18</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/笔记/">笔记</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="网站或接口相应时间长，应该怎么排查？"><a href="#网站或接口相应时间长，应该怎么排查？" class="headerlink" title="网站或接口相应时间长，应该怎么排查？"></a>网站或接口相应时间长，应该怎么排查？</h2><h3 id="引用文件问题"><a href="#引用文件问题" class="headerlink" title="引用文件问题"></a>引用文件问题</h3><p>浏览器F12，看看哪个文件时间长，可以排查有可能是css、js引用了一些被墙住的地址，一直请求不到，所以时间很久。</p>
+<p>解决：相关地方注释掉、引用本地的。</p>
+<h3 id="接口问题"><a href="#接口问题" class="headerlink" title="接口问题"></a>接口问题</h3><p>可以写个脚本内网访问一下接口，看看时间，时间长的就追踪到具体哪个业务慢。</p>
+<p>解决：不是mysql问题，就业务逻辑优化；mysql问题可以找sql语句去explain一下，针对性优化；数据量大可以分表；</p>
+<h3 id="网络问题"><a href="#网络问题" class="headerlink" title="网络问题"></a>网络问题</h3><p>本地网络带宽；DNS解析时间等；</p>
+<h3 id="服务器问题"><a href="#服务器问题" class="headerlink" title="服务器问题"></a>服务器问题</h3><p>查看linux服务器，cpu、io、network等状态；</p>
+<p>解决：top、iostat、netstat、vmstat等命令；</p>
+
+        </div>
+
+        
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/node/">node</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/04/19/笔记/解决问题记录/&title=《解决问题记录》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/04/19/笔记/解决问题记录/&title=《解决问题记录》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/04/19/笔记/解决问题记录/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《解决问题记录》 — Zfd's blog.&url=https://zfd.github.io/2018/04/19/笔记/解决问题记录/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/04/19/笔记/解决问题记录/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/04/19/服务器/linux/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">linux</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/04/17/服务器/redis集群/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">redis集群</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <!-- todo hide
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    -->
+    <div class="bottom">
+        <p><span>zfd &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/04/19/笔记/解决问题记录/&title=《解决问题记录》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/04/19/笔记/解决问题记录/&title=《解决问题记录》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/04/19/笔记/解决问题记录/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《解决问题记录》 — Zfd's blog.&url=https://zfd.github.io/2018/04/19/笔记/解决问题记录/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/04/19/笔记/解决问题记录/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKElEQVR42u3aS27DMBAE0dz/0g6QrSGlukdOoFFxZQg2w6fFhPP5+sLr9bPen5B1vtv756NfXbBkyJBxWwY5xPnWR98/ekJ242eTIUPGcxh8O3IsAuMM8g9AhgwZMjrS+c7kVzJkyJBxVcDtron8iilDhgwZPInlf57XxP4hF5chQ8YNGWlj4C8/f7C/IUOGjJswXuGahNE0QQ1OJUOGjNWM80EKfgXkhTNSqusSYBkyZGxl8K15GS5+i/g1HT6RIUPGIxnzdLcLoOXlUoYMGQ9gXDtmwcP0VaMeMmTI2M34dEGfh05evEO5uAwZMtYx5pc8ksROCnCTxFiGDBmbGGmTMmVMLpH8NcmQIWMfg5TbSOBLhyp47EfNThkyZKxm8FZiN0gxGRrrxj5kyJCxldGJ+fM0vJYlPBkyZCxldKlpELnDJmi5jwwZMh7A4IWtoHoXhtFR8ixDhozHMMj1rmOQl8LblvHdVoYMGTdndGknf9Lh0/AtQ4aM3QySrPJLXpcA87EMVG6TIUPGUgY/0HwIrCux/YKRIUPGasY8Ee3Kal0BLmhkypAhYxHjFa552S69gKIEW4YMGasZozgdJrddOY8P0cqQIWM3gwTZ+RF5ElsGehkyZDyAcf4lzuvamWnQL4fDZMiQ8QAGQaZht9tNhgwZMlJGWvRPy3CoCSpDhowHMNJRLR58eROUXDFRJ1aGDBnrGJPGQFfWn4yadQMiMmTIuC3jG+S0dHIW+O2QAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.7.2"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.7.2" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

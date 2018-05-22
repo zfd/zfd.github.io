@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>mysql事务 | Zfd&#39;s blog.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    
+    <meta name="keywords" content="mysql,acid">
+    <meta name="description" content="四个特性（ACID） 原子性（atomicity）：事务包含的所有操作，要么全部成功，要么全部失败； 一致性（consistency）：事务执行前后，mysql的状态是一致的； 隔离性（isolation）：并发时，多个事务互相不干扰； 持久性（durability）：事务一旦提交，对于数据库的数据改变就是永久的。  开启命令12345begin // start transaction...co">
+<meta name="keywords" content="mysql,acid">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mysql事务">
+<meta property="og:url" content="https://zfd.github.io/2018/04/25/数据库/mysql事务/index.html">
+<meta property="og:site_name" content="Zfd&#39;s blog.">
+<meta property="og:description" content="四个特性（ACID） 原子性（atomicity）：事务包含的所有操作，要么全部成功，要么全部失败； 一致性（consistency）：事务执行前后，mysql的状态是一致的； 隔离性（isolation）：并发时，多个事务互相不干扰； 持久性（durability）：事务一旦提交，对于数据库的数据改变就是永久的。  开启命令12345begin // start transaction...co">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-22T09:48:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mysql事务">
+<meta name="twitter:description" content="四个特性（ACID） 原子性（atomicity）：事务包含的所有操作，要么全部成功，要么全部失败； 一致性（consistency）：事务执行前后，mysql的状态是一致的； 隔离性（isolation）：并发时，多个事务互相不干扰； 持久性（durability）：事务一旦提交，对于数据库的数据改变就是永久的。  开启命令12345begin // start transaction...co">
+    
+        <link rel="alternate" type="application/atom+xml" title="Zfd&#39;s blog." href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/icon_trans.png">
+    <link rel="stylesheet" href="/css/style.css?v=1.7.2">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/icon.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zfd</h5>
+          <a href="mailto:zf.dong@qq.com" title="zf.dong@qq.com" class="mail">zf.dong@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                首页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zfd" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">mysql事务</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <!-- todo hide -->
+        <a href="javascript:;" style="display:none;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">mysql事务</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-04-25T09:44:17.000Z" itemprop="datePublished" class="page-time">
+  2018-04-25
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/数据库/">数据库</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>目录</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#四个特性（ACID）"><span class="post-toc-number">1.</span> <span class="post-toc-text">四个特性（ACID）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#开启命令"><span class="post-toc-number">2.</span> <span class="post-toc-text">开启命令</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#隔离级别"><span class="post-toc-number">3.</span> <span class="post-toc-text">隔离级别</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#脏读（dirty-read）"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">脏读（dirty read）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#不可重复读（nonRepeatable-read）"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">不可重复读（nonRepeatable read）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#幻读"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">幻读</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#锁类型"><span class="post-toc-number">4.</span> <span class="post-toc-text">锁类型</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#表锁"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">表锁</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#行锁"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">行锁</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#间隙锁（GAP锁）"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">间隙锁（GAP锁）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#next-key锁"><span class="post-toc-number">4.4.</span> <span class="post-toc-text">next-key锁</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#多版本并发控制（MVCC）"><span class="post-toc-number">4.5.</span> <span class="post-toc-text">多版本并发控制（MVCC）</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#锁的应用"><span class="post-toc-number">5.</span> <span class="post-toc-text">锁的应用</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#避免脏读"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">避免脏读</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#避免不可重复读"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">避免不可重复读</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#避免幻读"><span class="post-toc-number">5.3.</span> <span class="post-toc-text">避免幻读</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-数据库/mysql事务"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">mysql事务</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-04-25 09:44:17" datetime="2018-04-25T09:44:17.000Z"  itemprop="datePublished">2018-04-25</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/数据库/">数据库</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="四个特性（ACID）"><a href="#四个特性（ACID）" class="headerlink" title="四个特性（ACID）"></a>四个特性（ACID）</h2><ul>
+<li>原子性（atomicity）：事务包含的所有操作，要么全部成功，要么全部失败；</li>
+<li>一致性（consistency）：事务执行前后，mysql的状态是一致的；</li>
+<li>隔离性（isolation）：并发时，多个事务互相不干扰；</li>
+<li>持久性（durability）：事务一旦提交，对于数据库的数据改变就是永久的。</li>
+</ul>
+<h2 id="开启命令"><a href="#开启命令" class="headerlink" title="开启命令"></a>开启命令</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">begin</span> // <span class="keyword">start</span> <span class="keyword">transaction</span></span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">commit</span>; // <span class="keyword">rollback</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="隔离级别"><a href="#隔离级别" class="headerlink" title="隔离级别"></a>隔离级别</h2><table>
+<thead>
+<tr>
+<th>隔离级别</th>
+<th>脏读</th>
+<th>不可重复读</th>
+<th>幻读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>未提交读（read uncommitted）</td>
+<td>O</td>
+<td>O</td>
+<td>O</td>
+</tr>
+<tr>
+<td>已提交读（read committed）</td>
+<td>X</td>
+<td>O</td>
+<td>O</td>
+</tr>
+<tr>
+<td>可重复读（repeatable read）</td>
+<td>X</td>
+<td>X</td>
+<td>O</td>
+</tr>
+<tr>
+<td>可串行化（serializable）</td>
+<td>X</td>
+<td>X</td>
+<td>X</td>
+</tr>
+</tbody>
+</table>
+<h3 id="脏读（dirty-read）"><a href="#脏读（dirty-read）" class="headerlink" title="脏读（dirty read）"></a>脏读（dirty read）</h3><p>事务A读取了事务B未提交的数据。</p>
+<h3 id="不可重复读（nonRepeatable-read）"><a href="#不可重复读（nonRepeatable-read）" class="headerlink" title="不可重复读（nonRepeatable read）"></a>不可重复读（nonRepeatable read）</h3><p>一个事务中，多次查询某个数据却返回不同的值；这是由于事务A查询间隔内，另一个事务修改并提交了该数据。</p>
+<h3 id="幻读"><a href="#幻读" class="headerlink" title="幻读"></a>幻读</h3><p>一个事务中，读取到了别的事务插入的数据，导致前后不一致。</p>
+<h2 id="锁类型"><a href="#锁类型" class="headerlink" title="锁类型"></a>锁类型</h2><h3 id="表锁"><a href="#表锁" class="headerlink" title="表锁"></a>表锁</h3><p>对一张表加锁，并发能力低下（读/写锁）。</p>
+<h3 id="行锁"><a href="#行锁" class="headerlink" title="行锁"></a>行锁</h3><p>只锁住特定行的数据，并发能力强。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//2种一致性锁定读操</span><br><span class="line"></span><br><span class="line">//共享锁</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">table</span> <span class="keyword">where</span> ? <span class="keyword">lock</span> <span class="keyword">in</span> <span class="keyword">share</span> <span class="keyword">mode</span>;</span><br><span class="line"></span><br><span class="line">//排它锁</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">table</span> <span class="keyword">where</span> ? <span class="keyword">for</span> <span class="keyword">update</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="间隙锁（GAP锁）"><a href="#间隙锁（GAP锁）" class="headerlink" title="间隙锁（GAP锁）"></a>间隙锁（GAP锁）</h3><p>使用索引对行锁两边的区间加锁，避免其他事务在这两个区间插入数据。</p>
+<h3 id="next-key锁"><a href="#next-key锁" class="headerlink" title="next-key锁"></a>next-key锁</h3><p>就是行锁+间隙锁，用来避免幻读。</p>
+<h3 id="多版本并发控制（MVCC）"><a href="#多版本并发控制（MVCC）" class="headerlink" title="多版本并发控制（MVCC）"></a>多版本并发控制（MVCC）</h3><p>乐观锁，通过版本号控制，最后提交检查版本号再提交事务。</p>
+<h2 id="锁的应用"><a href="#锁的应用" class="headerlink" title="锁的应用"></a>锁的应用</h2><h3 id="避免脏读"><a href="#避免脏读" class="headerlink" title="避免脏读"></a>避免脏读</h3><p>脏读：事务A读到事务B未提交的数据；</p>
+<p>解决：</p>
+<ul>
+<li>事务级别，已提交读以上，都只会读取已提交数据；</li>
+<li>未提交读级别下，可以用select加排它锁，防止其他事务读；</li>
+</ul>
+<h3 id="避免不可重复读"><a href="#避免不可重复读" class="headerlink" title="避免不可重复读"></a>避免不可重复读</h3><p>不可重复读：事务中多次查询数据的值不一致。</p>
+<p>处理：</p>
+<ul>
+<li>可重复读之下，使用mvcc解决，读取一个快照数据；</li>
+<li>已提交读之上，可以对select加共享锁，防止其他事务写；</li>
+</ul>
+<h3 id="避免幻读"><a href="#避免幻读" class="headerlink" title="避免幻读"></a>避免幻读</h3><p>使用next-key锁（间隙锁+行锁），innodb自动加。</p>
+<p>用法：(隔离级别：可重复读)</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">begin</span>;</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> xxx <span class="keyword">where</span> <span class="keyword">id</span> <span class="keyword">between</span> <span class="number">10</span> <span class="keyword">and</span> <span class="number">15</span> <span class="keyword">lock</span> <span class="keyword">in</span> <span class="keyword">share</span> <span class="keyword">mode</span>;//for <span class="keyword">update</span></span><br><span class="line">...</span><br><span class="line"><span class="keyword">commit</span>;//<span class="keyword">rollback</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>防止间隙插入新数据；</li>
+<li>防止已有数据，更新成间隙内的数据；</li>
+</ul>
+<p>可串行化：是默认读加共享锁，写加排他锁，读写互斥。</p>
+
+        </div>
+
+        
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/acid/">acid</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/">mysql</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/04/25/数据库/mysql事务/&title=《mysql事务》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/04/25/数据库/mysql事务/&title=《mysql事务》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/04/25/数据库/mysql事务/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《mysql事务》 — Zfd's blog.&url=https://zfd.github.io/2018/04/25/数据库/mysql事务/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/04/25/数据库/mysql事务/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/05/02/web/http、https/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">http、https</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/04/19/服务器/linux/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">linux</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <!-- todo hide
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    -->
+    <div class="bottom">
+        <p><span>zfd &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/04/25/数据库/mysql事务/&title=《mysql事务》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/04/25/数据库/mysql事务/&title=《mysql事务》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/04/25/数据库/mysql事务/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《mysql事务》 — Zfd's blog.&url=https://zfd.github.io/2018/04/25/数据库/mysql事务/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/04/25/数据库/mysql事务/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLklEQVR42u3aSW7jQBAEQP3/0xrAJwEe0ZnVlGE2gyeB4tLBQ6FreTzi4/l1vP5+Pd6df/33+9OOn/D4xIGBgXFZxvPwOGbk1OQt7XMwMDDuxlgPsu8+TX7m3XuP14aBgYHRPnrlyvYJGBgYGLMtWr7E9U+GgYFxN0aSxB6/ICmTJcv9eC6OgYFxQcasMfA7vz/e38DAwPjzjFn5fqUBOWtw/rAqDAyMrRntJm9l+9huBNsSHgYGxq6MBDDbtM3SzqSp+Z8zGBgYWzPahZ61cVxJZd9eg4GBsTUjb0CeNTAxC8R5qoyBgbEfYz2JbduKK23ID+biGBgYf5jRBt883W3Lam3jISJhYGBsxzhr8CtfRL64Yp+LgYGxESMvrrVLyQv9syCOgYFxH8asMdkW0dpxMQwMDIy20tUuIrky+RAr21MMDIydGPlmLg95+b15qK2TWAwMjK0ZSauyDaMrLczhmAUGBsZ2jPXx05UwvR6+MTAw9ma0ha02TT25ZJZk5BgYGNsx2nGHlZe1Dc6iwYCBgXEDRl5jnwXf/N5hUwEDA2NrxvHfs6GxtsFw2sAHBgbGpoxnebRtg1mamgdlDAyMOzDOSkdXgnW+0BOSbQwMjMsy8iDbjk20I2JtW7SeEMHAwLg4I29q5ne17KWgj4GBgREvepb0Jp/sh0CMgYGBUTLaMyufBgMD4z6MvBmQF8VmI1/DlgAGBsbWjDaBzNPdlp0H/WEyjIGBcT3GPyH4A/EZRHPWAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.7.2"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.7.2" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>PHP核心技术与最佳实践 | Zfd&#39;s blog.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    
+    <meta name="keywords" content="php,note">
+    <meta name="description" content="面向对象的的核心概念面向对象 面向对象（OO）：是软件开发方法。  面向对象编程（OOP）：将对象作为程序的基本单元，把程序和数据封装其中，以提高软件的重用性、灵活性和可拓展性。  序列化、反序列化 对象的底层实现：“属性数组”+“方法数组”。  对象的序列化：把保存在内存中的对象的属性保存起来，并且可以在需要的时候还原出来。（serialize）  继承、封装、多态 面向对象思想的三大要素：继承">
+<meta name="keywords" content="php,note">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP核心技术与最佳实践">
+<meta property="og:url" content="https://zfd.github.io/2018/03/01/笔记/PHP核心技术与最佳实践/index.html">
+<meta property="og:site_name" content="Zfd&#39;s blog.">
+<meta property="og:description" content="面向对象的的核心概念面向对象 面向对象（OO）：是软件开发方法。  面向对象编程（OOP）：将对象作为程序的基本单元，把程序和数据封装其中，以提高软件的重用性、灵活性和可拓展性。  序列化、反序列化 对象的底层实现：“属性数组”+“方法数组”。  对象的序列化：把保存在内存中的对象的属性保存起来，并且可以在需要的时候还原出来。（serialize）  继承、封装、多态 面向对象思想的三大要素：继承">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-22T09:48:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP核心技术与最佳实践">
+<meta name="twitter:description" content="面向对象的的核心概念面向对象 面向对象（OO）：是软件开发方法。  面向对象编程（OOP）：将对象作为程序的基本单元，把程序和数据封装其中，以提高软件的重用性、灵活性和可拓展性。  序列化、反序列化 对象的底层实现：“属性数组”+“方法数组”。  对象的序列化：把保存在内存中的对象的属性保存起来，并且可以在需要的时候还原出来。（serialize）  继承、封装、多态 面向对象思想的三大要素：继承">
+    
+        <link rel="alternate" type="application/atom+xml" title="Zfd&#39;s blog." href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/icon_trans.png">
+    <link rel="stylesheet" href="/css/style.css?v=1.7.2">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/icon.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zfd</h5>
+          <a href="mailto:zf.dong@qq.com" title="zf.dong@qq.com" class="mail">zf.dong@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                首页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zfd" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">PHP核心技术与最佳实践</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <!-- todo hide -->
+        <a href="javascript:;" style="display:none;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">PHP核心技术与最佳实践</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-03-01T10:02:32.000Z" itemprop="datePublished" class="page-time">
+  2018-03-01
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/笔记/">笔记</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>目录</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#面向对象的的核心概念"><span class="post-toc-number">1.</span> <span class="post-toc-text">面向对象的的核心概念</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#面向对象"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">面向对象</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#序列化、反序列化"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">序列化、反序列化</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#继承、封装、多态"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">继承、封装、多态</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#继承"><span class="post-toc-number">1.3.1.</span> <span class="post-toc-text">继承</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#封装"><span class="post-toc-number">1.3.2.</span> <span class="post-toc-text">封装</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#多态"><span class="post-toc-number">1.3.3.</span> <span class="post-toc-text">多态</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#反射"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">反射</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#异常"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">异常</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#PHP网络技术及应用"><span class="post-toc-number">2.</span> <span class="post-toc-text">PHP网络技术及应用</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Web-基础"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">Web 基础</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#HTTP请求"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">HTTP请求</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#HTTP响应"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">HTTP响应</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#PHP模板引擎的原理和实践"><span class="post-toc-number">3.</span> <span class="post-toc-text">PHP模板引擎的原理和实践</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#smarty（直接看smarty就可以了）"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">smarty（直接看smarty就可以了）</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#缓存详解"><span class="post-toc-number">4.</span> <span class="post-toc-text">缓存详解</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#作用"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">作用</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#原理"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">原理</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#应用"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">应用</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#缓存的三个要素"><span class="post-toc-number">4.4.</span> <span class="post-toc-text">缓存的三个要素</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#命中率"><span class="post-toc-number">4.4.1.</span> <span class="post-toc-text">命中率</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#更新策略"><span class="post-toc-number">4.5.</span> <span class="post-toc-text">更新策略</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#最大数据量"><span class="post-toc-number">4.6.</span> <span class="post-toc-text">最大数据量</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Memcached使用与实践"><span class="post-toc-number">5.</span> <span class="post-toc-text">Memcached使用与实践</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#为什么要用memcached？"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">为什么要用memcached？</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#redis使用与实践"><span class="post-toc-number">6.</span> <span class="post-toc-text">redis使用与实践</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#数据结构"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">数据结构</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#简单动态字符串（SDS）"><span class="post-toc-number">6.1.1.</span> <span class="post-toc-text">简单动态字符串（SDS）</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#链表"><span class="post-toc-number">6.1.2.</span> <span class="post-toc-text">链表</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#字典"><span class="post-toc-number">6.1.3.</span> <span class="post-toc-text">字典</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#跳跃表（skiplist）"><span class="post-toc-number">6.1.4.</span> <span class="post-toc-text">跳跃表（skiplist）</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#整数集合（intset）"><span class="post-toc-number">6.1.5.</span> <span class="post-toc-text">整数集合（intset）</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#压缩列表（ziplist）"><span class="post-toc-number">6.1.6.</span> <span class="post-toc-text">压缩列表（ziplist）</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#redis优势"><span class="post-toc-number">6.2.</span> <span class="post-toc-text">redis优势</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#持久化"><span class="post-toc-number">6.3.</span> <span class="post-toc-text">持久化</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#主从复制"><span class="post-toc-number">6.4.</span> <span class="post-toc-text">主从复制</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#hash算法及数据库实现"><span class="post-toc-number">7.</span> <span class="post-toc-text">hash算法及数据库实现</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-笔记/PHP核心技术与最佳实践"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">PHP核心技术与最佳实践</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-03-01 10:02:32" datetime="2018-03-01T10:02:32.000Z"  itemprop="datePublished">2018-03-01</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/笔记/">笔记</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="面向对象的的核心概念"><a href="#面向对象的的核心概念" class="headerlink" title="面向对象的的核心概念"></a>面向对象的的核心概念</h2><h3 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h3><blockquote>
+<p><code>面向对象</code>（OO）：是软件开发方法。<br>  <code>面向对象编程</code>（OOP）：将对象作为程序的基本单元，把程序和数据封装其中，以提高软件的重用性、灵活性和可拓展性。</p>
+</blockquote>
+<h3 id="序列化、反序列化"><a href="#序列化、反序列化" class="headerlink" title="序列化、反序列化"></a>序列化、反序列化</h3><blockquote>
+<p>对象的底层实现：“属性数组”+“方法数组”。<br>  对象的序列化：把保存在内存中的对象的属性保存起来，并且可以在需要的时候还原出来。（serialize）</p>
+</blockquote>
+<h3 id="继承、封装、多态"><a href="#继承、封装、多态" class="headerlink" title="继承、封装、多态"></a>继承、封装、多态</h3><blockquote>
+<p>面向对象思想的<code>三大要素</code>：继承、封装、多态。<br>  <code>作用</code>：让代码更具开放性、可扩充性，增加代码的重用性、提高软件的可维护性。</p>
+</blockquote>
+<h4 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h4><p>作用：继承一个公共类，可以使用一些公有方法，提升程序的效率，减少代码的重复。</p>
+<ul>
+<li>用关键字extends实现继承。</li>
+<li>子类只能继承父类的非私有属性。</li>
+<li>子类继承父类后，相当于将父类的属性和方法copy到子类，可以直接使用$this调用该属性。</li>
+<li>PHP只能单继承，不支持一个类继承多个类。但是一个类可以进行多层继承（即A继承于B，而C又继承于A，C通过A间接继承了B）。 </li>
+</ul>
+<h4 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h4><p>作用：防止代码冗余，也可以方便代码的调用。</p>
+<h4 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h4><p>概念：同一个类的不同子类表现出不同的形态。（子类重写父类的方法）</p>
+<h3 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h3><blockquote>
+<p>通过反射，可以找到一个对象所属的类及拥有的方法。<br>在平常开发中，用到反射的地方不多：一个是对对象进行调试，另一个是获取类的信息</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php"><span class="class"><span class="keyword">class</span> <span class="title">person</span> </span>&#123;</span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> $name;</span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> $gender;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">say</span><span class="params">()</span> </span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">echo</span> <span class="keyword">$this</span>-&gt;name, <span class="string">" "</span>, <span class="keyword">$this</span>-&gt;gender, <span class="string">"\r\n"</span>;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">set</span><span class="params">($name, $value)</span> </span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">echo</span> <span class="string">"Setting $name to $value \r\n"</span>;</span></span><br><span class="line"><span class="php">        <span class="keyword">$this</span>-&gt;$name = $value;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">get</span><span class="params">($name)</span> </span>&#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">if</span> (!<span class="keyword">isset</span>(<span class="keyword">$this</span>-&gt;$name)) &#123;</span></span><br><span class="line"><span class="php">            <span class="keyword">echo</span> <span class="string">'未设置'</span>;</span></span><br><span class="line"><span class="php">            <span class="keyword">$this</span>-&gt;$name = <span class="string">"正在为你设置默认值"</span>;</span></span><br><span class="line"><span class="php">        &#125;</span></span><br><span class="line"><span class="php">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;$name;</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php">$student = <span class="keyword">new</span> person();</span></span><br><span class="line"><span class="php">$student-&gt;name = <span class="string">'Tom'</span>;</span></span><br><span class="line"><span class="php">$student-&gt;gender = <span class="string">'male'</span>;</span></span><br><span class="line"><span class="php">$student-&gt;age = <span class="number">24</span>;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php"><span class="comment">// 获取对象属性列表</span></span></span><br><span class="line"><span class="php">$reflect = <span class="keyword">new</span> ReflectionObject($student);</span></span><br><span class="line"><span class="php">$props = $reflect-&gt;getProperties();</span></span><br><span class="line"><span class="php"><span class="keyword">foreach</span> ($props <span class="keyword">as</span> $prop) &#123;</span></span><br><span class="line"><span class="php">    <span class="keyword">print</span> $prop-&gt;getName() . <span class="string">"\n"</span>;</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php"><span class="comment">// 获取对象方法列表</span></span></span><br><span class="line"><span class="php">$m = $reflect-&gt;getMethods();</span></span><br><span class="line"><span class="php"><span class="keyword">foreach</span> ($m <span class="keyword">as</span> $prop) &#123;</span></span><br><span class="line"><span class="php">    <span class="keyword">print</span> $prop-&gt;getName() . <span class="string">"\n"</span>;</span></span><br><span class="line"><span class="php">&#125;</span></span><br><span class="line"><span class="php"></span></span><br><span class="line"><span class="php"><span class="comment">// 返回对象属性的关联数组</span></span></span><br><span class="line"><span class="php">var_dump(get_object_vars($student));</span></span><br><span class="line"><span class="php"><span class="comment">// 类属性</span></span></span><br><span class="line"><span class="php">var_dump(get_class_vars(get_class($student)));</span></span><br><span class="line"><span class="php"><span class="comment">// 返回由类的方法名组成的数组</span></span></span><br><span class="line"><span class="php">var_dump(get_class_methods(get_class($student)));</span></span><br><span class="line"><span class="php"><span class="comment">// 获取对象属性列表所属的类</span></span></span><br><span class="line"><span class="php"><span class="keyword">echo</span> get_class($student);</span></span><br></pre></td></tr></table></figure>
+<h3 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h3><ul>
+<li>Deprecated最低级别错误，程序继续执行</li>
+<li>Notice 通知级别的错误 如直接使用未声明变量，程序继续执行</li>
+<li>Warning 警告级别的错误，可能得不到想要的结果</li>
+<li>Fatal error  致命级别错误致命级别错误，程序不往下执行</li>
+<li>parse error 语法解析错误，最高级别错误，连其他错误信息也不呈现出来</li>
+<li>E_USER_相关错误 用户设置的相关错误</li>
+</ul>
+<p>error_reporting(-1)显示所有错误，error_reporting(0)屏蔽所有错误。</p>
+<p>error_reporting(E_ALL&amp;~E_NOTICE)不显示通知级别的错误。“~”表示非。</p>
+<h2 id="PHP网络技术及应用"><a href="#PHP网络技术及应用" class="headerlink" title="PHP网络技术及应用"></a>PHP网络技术及应用</h2><h3 id="Web-基础"><a href="#Web-基础" class="headerlink" title="Web 基础"></a>Web 基础</h3><p>HTTP（HyperText Transfer Protocol，超文本传输协议）。<br>WWW（World Wide Web）的三种技术：HTML、HTTP、URL。<br>RFC（Request for Comments，征求修正意见书），互联网的设计文档。</p>
+<p>URI（Uniform Resource Indentifier，统一资源标识符）<br>URL（Uniform Resource Locator，统一资源定位符）<br>URN（Uniform Resource Name，统一资源名称），例如 urn:isbn:0-486-27557-4<br>URI 包含 URL 和 URN，目前 WEB 只有 URL 比较流行，所以见到的基本都是 URL。</p>
+<h3 id="HTTP请求"><a href="#HTTP请求" class="headerlink" title="HTTP请求"></a>HTTP请求</h3><blockquote>
+<p>CRLF：Carriage-Return Line-Feed，即回车+换行，\r\n</p>
+</blockquote>
+<ul>
+<li>请求行：请求方法 + URL + 协议/版本 + CRLF，之间由空格分隔 </li>
+<li>请求头：key + “:” + value + CRLF （N行）</li>
+<li>空行</li>
+<li>请求正文：Get请求没有正文/Post请求正文是参数</li>
+</ul>
+<h3 id="HTTP响应"><a href="#HTTP响应" class="headerlink" title="HTTP响应"></a>HTTP响应</h3><ul>
+<li>状态行：协议/版本 + 状态码 + 状态码描述 + CRLF，之间由空格分隔</li>
+<li>响应头：key + “:” + value + CRLF （N行）</li>
+<li>空行</li>
+<li>响应正文：html/json等</li>
+</ul>
+<p>响应消息：<br>1xx:信息响应类，表示接收到请求并且继续处理<br>2xx:处理成功响应类，表示动作被成功接收、理解和接受<br>3xx:重定向响应类，为了完成指定的动作，必须接受进一步处理<br>4xx:客户端错误，客户请求包含语法错误或者是不能正确执行<br>5xx:服务端错误，服务器不能正确执行一个正确的请求</p>
+<h2 id="PHP模板引擎的原理和实践"><a href="#PHP模板引擎的原理和实践" class="headerlink" title="PHP模板引擎的原理和实践"></a>PHP模板引擎的原理和实践</h2><h3 id="smarty（直接看smarty就可以了）"><a href="#smarty（直接看smarty就可以了）" class="headerlink" title="smarty（直接看smarty就可以了）"></a>smarty（直接看smarty就可以了）</h3><blockquote>
+<p>smarty是基于PHP开发的PHP模板引擎，他提供了php逻辑与html页面的分离</p>
+</blockquote>
+<p>工作流程：</p>
+<ul>
+<li>把需要显示的变量，赋值，塞到对象的内部属性中的一个数组里 </li>
+<li>然后编译模板，将标签解析成相应的php echo代码 </li>
+<li>引入编译后的php文件</li>
+</ul>
+<p>使用步骤：</p>
+<ul>
+<li>Smarty是一个类，要使用的话，必须引入在进行实例化 </li>
+<li>使用assign给模板赋值 </li>
+<li>使用display方法（从编译到输出）</li>
+</ul>
+<p>优点：</p>
+<ul>
+<li>速度快：相对于其他模板引擎</li>
+<li>编译型：把模板文件替换成一个HTML+PHP混合的PHP文件，当下模板没有改变，将自动转向编译文件</li>
+<li>缓存技术：一定缓存时间内，用户最终看到的html文件缓存成一个静态的html页</li>
+<li>插件技术：可以自定义插件</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>编译模板，浪费时间 </li>
+<li>要把变量再重新赋值到对象的属性中，增大了开销</li>
+<li>不适用用实时更新，股票、天气等</li>
+<li>不适用于小项目，小项目直接开发更快</li>
+</ul>
+<p>Smarty.class.php：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?php</span></span></span><br><span class="line"><span class="php"> </span></span><br><span class="line"><span class="php"><span class="class"><span class="keyword">class</span> <span class="title">Smarty</span>  //此类就是<span class="title">libs</span>中的<span class="title">Smarty</span>.<span class="title">class</span>.<span class="title">php</span>类</span></span></span><br><span class="line"><span class="php">&#123;</span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> $leftlimit=<span class="string">"&lt;&#123;"</span>;  <span class="comment">//左分隔符</span></span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> $rightlimit=<span class="string">"&#125;&gt;"</span>;<span class="comment">//右分隔符</span></span></span><br><span class="line"><span class="php">    <span class="keyword">public</span> $attr;  <span class="comment">//存放变量信息的数组</span></span></span><br><span class="line"><span class="php">     </span></span><br><span class="line"><span class="php">     </span></span><br><span class="line"><span class="php">    <span class="comment">//注册变量</span></span></span><br><span class="line"><span class="php">    <span class="function"><span class="keyword">function</span> <span class="title">assign</span><span class="params">($k,$v)</span></span></span></span><br><span class="line"><span class="php">    &#123;</span></span><br><span class="line"><span class="php">        <span class="keyword">$this</span>-&gt;attr[$k] = $v;  <span class="comment">//向数组中添加一个值,相当于$sttr[0]="sdc123"</span></span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php">     </span></span><br><span class="line"><span class="php">    <span class="comment">//显示模板</span></span></span><br><span class="line"><span class="php">    <span class="function"><span class="keyword">function</span> <span class="title">display</span><span class="params">($name)</span></span></span></span><br><span class="line"><span class="php">    &#123;</span></span><br><span class="line"><span class="php">        <span class="comment">//1.造模板路径</span></span></span><br><span class="line"><span class="php">        $filename = $mubanlujing.$name;</span></span><br><span class="line"><span class="php">         </span></span><br><span class="line"><span class="php">        <span class="comment">//2.获取模板内容,内容是一大串代码,(例如模板为index.html)</span></span></span><br><span class="line"><span class="php">        $str=file_get_contents($filename);</span></span><br><span class="line"><span class="php">         </span></span><br><span class="line">        /*$str里面的代吗内容</span><br><span class="line">        &lt;html&gt;</span><br><span class="line">        &lt;head&gt;</span><br><span class="line">        &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8" /&gt;</span><br><span class="line">        &lt;/head&gt;</span><br><span class="line">        &lt;body&gt;</span><br><span class="line">        &lt;div&gt;&#123;$aa&#125;&lt;/div&gt;</span><br><span class="line">        &lt;/body&gt;</span><br><span class="line">        &lt;/html&gt;</span><br><span class="line"><span class="php">        */</span></span><br><span class="line"><span class="php">         </span></span><br><span class="line"><span class="php">        <span class="comment">//3.用正则去匹配字符串中出现的&#123;&#125;里面的内容</span></span></span><br><span class="line"><span class="php">         </span></span><br><span class="line"><span class="php">        <span class="comment">//4.将内容读取（读取到的是数组里面的key），拿key去数组attr里面取value值</span></span></span><br><span class="line"><span class="php">         </span></span><br><span class="line">            /*$str里面的代码内容</span><br><span class="line">            &lt;html&gt;</span><br><span class="line">            &lt;head&gt;</span><br><span class="line">            &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8" /&gt;</span><br><span class="line">            &lt;/head&gt;</span><br><span class="line">            &lt;body&gt;</span><br><span class="line">            &lt;div&gt;&lt;?php echo $attr[key]?&gt;&lt;/div&gt;</span><br><span class="line">            &lt;/body&gt;</span><br><span class="line">            &lt;/html&gt;</span><br><span class="line"><span class="php">            */</span></span><br><span class="line"><span class="php">         </span></span><br><span class="line"><span class="php">        <span class="comment">//5.将str里面的内容保存在缓存文件里面</span></span></span><br><span class="line"><span class="php">        file_put_contents($filename,$str);<span class="comment">//$filename是新的文件</span></span></span><br><span class="line"><span class="php">         </span></span><br><span class="line"><span class="php">        <span class="comment">//6.将存储的文件加载到当前页面</span></span></span><br><span class="line"><span class="php">        <span class="keyword">include</span>(filename);</span></span><br><span class="line"><span class="php">    &#125;</span></span><br><span class="line"><span class="php">     </span></span><br><span class="line"><span class="php">&#125;</span></span><br></pre></td></tr></table></figure>
+<h2 id="缓存详解"><a href="#缓存详解" class="headerlink" title="缓存详解"></a>缓存详解</h2><blockquote>
+<p><code>缓存</code>：凡是位于速度相差较大的两种介质之间，用于协调两者数据传输速度差异的结构。</p>
+</blockquote>
+<h3 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h3><ul>
+<li>性能：解决高并发，大数据场景下，热点数据访问的性能问题。提供高性能的数据快速访问。(主要作用)</li>
+<li>稳定性：一些重复请求每次都要处理，会加大服务器的资源消耗，影响系统稳定性。</li>
+<li>可用性：提供数据的服务挂了，缓存可以在一段时间内正常提供用户支持，提高系统可用性。</li>
+</ul>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>减少计算量，缩短请求流程（网络i/o、硬盘i/o）：</p>
+<ul>
+<li>将数据写入/读取速度更快的存储（设备）；</li>
+<li>将数据缓存到离应用最近的位置；</li>
+<li>将数据缓存到离用户最近的位置。</li>
+</ul>
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><p>理论上，web的每一层都可以被缓存。</p>
+<ul>
+<li>CPU缓存；</li>
+<li>内存：Memcached这样的Key Value内存缓存；</li>
+<li>数据库：Query cache，Table cache，Thread cache；</li>
+<li>应用程序代码级别：Smarty文件缓存；</li>
+<li>浏览器：浏览器缓存；</li>
+</ul>
+<p>注：理论上各层都可以被缓存。</p>
+<p><code>缓存的存放位置</code>：CPU、内存、硬盘。</p>
+<h3 id="缓存的三个要素"><a href="#缓存的三个要素" class="headerlink" title="缓存的三个要素"></a>缓存的三个要素</h3><blockquote>
+<p>命中率，更新策略，最大数据量。</p>
+</blockquote>
+<h4 id="命中率"><a href="#命中率" class="headerlink" title="命中率"></a>命中率</h4><p>命中率 = 请求缓存次数 / 缓存返回正确结果，比例越高越好，比例过低可能会造成反效果。</p>
+<h3 id="更新策略"><a href="#更新策略" class="headerlink" title="更新策略"></a>更新策略</h3><p>超出缓存最大数据量时，清理缓存的常用策略：</p>
+<ul>
+<li>FIFO（first in first out），先进先出；（如：mysql的query cache）</li>
+<li>LFU（less frequently used），最少使用；</li>
+<li>LRU（least recently used），最近最少使用；</li>
+</ul>
+<h3 id="最大数据量"><a href="#最大数据量" class="headerlink" title="最大数据量"></a>最大数据量</h3><p>缓存元素的最大个数 或 所能使用的最大存储空间。</p>
+<p>超出最大数据量时，一般如下处理：</p>
+<ul>
+<li>停止缓存服务，所有缓存数据清空；</li>
+<li>拒绝写入，拒绝更新；</li>
+<li>根据缓存策略，清理旧数据（还可以备份旧数据）；</li>
+</ul>
+<h2 id="Memcached使用与实践"><a href="#Memcached使用与实践" class="headerlink" title="Memcached使用与实践"></a>Memcached使用与实践</h2><blockquote>
+<p>本质上是一个key/value的内存数据库，但是不支持数据的持久化，服务器关闭之后数据全部丢失。</p>
+</blockquote>
+<h3 id="为什么要用memcached？"><a href="#为什么要用memcached？" class="headerlink" title="为什么要用memcached？"></a>为什么要用memcached？</h3><ul>
+<li>对数据库的高并发读写；（关系型数据库承受不了高并发的读写，如：每秒上万次）</li>
+<li>对海量数据的处理；（数据量上亿左右，表的读写效率低）</li>
+</ul>
+<h2 id="redis使用与实践"><a href="#redis使用与实践" class="headerlink" title="redis使用与实践"></a>redis使用与实践</h2><blockquote>
+<p>本质上是一个key/value的内存数据库。</p>
+</blockquote>
+<h3 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h3><table>
+<thead>
+<tr>
+<th>结构类型</th>
+<th>结构存储的值</th>
+<th>结构的读写能力</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>string</td>
+<td>字符串、整形、浮点数</td>
+<td>对字符串整个或部分操作，对整形、浮点数自增或自减</td>
+</tr>
+<tr>
+<td>list</td>
+<td>链表，每个节点都包含一个字符串</td>
+<td>两端push、pop；根据偏移量修剪；读取单个或多个元素；根据值查找或移除元素</td>
+</tr>
+<tr>
+<td>set</td>
+<td>无序集合，包含string，并且每个字符串都是唯一</td>
+<td>CRUD元素；与集合计算交集、并集、差集；从集合随机获取元素</td>
+</tr>
+<tr>
+<td>hash</td>
+<td>散列表，包含键值对，key/value 都是字符串类型</td>
+<td>CRUD键值对；获取所有键值对</td>
+</tr>
+<tr>
+<td>zset</td>
+<td>有序集合，字符串成语与浮点数分值之间的有序映射，元素排序顺序由分值大小决定</td>
+<td>CRUD元素；根据分值范围或成员获取元素</td>
+</tr>
+</tbody>
+</table>
+<h4 id="简单动态字符串（SDS）"><a href="#简单动态字符串（SDS）" class="headerlink" title="简单动态字符串（SDS）"></a>简单动态字符串（SDS）</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * 保存字符串对象的结构 </span></span><br><span class="line"><span class="comment"> */</span>  </span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sdshdr</span> &#123;</span>      </span><br><span class="line">    <span class="comment">// buf 中已占用空间的长度  </span></span><br><span class="line">    <span class="keyword">int</span> len;  </span><br><span class="line">    <span class="comment">// buf 中剩余可用空间的长度  </span></span><br><span class="line">    <span class="keyword">int</span> <span class="built_in">free</span>;  </span><br><span class="line">    <span class="comment">// 数据空间  </span></span><br><span class="line">    <span class="keyword">char</span> buf[];  </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>优点：</p>
+<ul>
+<li>常数复杂度获取字符串的长度：len属性保存了字符串的长度；（’\0’空字符不计入len）</li>
+<li>杜绝缓冲区溢出：当对SDS进行修改时，先检查SDS的空间是否满足修改所需要的空间要求，如果不满足，则先扩展空间，然后执行修改操作；</li>
+<li>减少修改字符串带来的内存重分配次数：<ul>
+<li>空间预分配：当SDS的长度小于1MB时，分配（2 * len + 1B）的空间；当SDS的长度大于等于1MB时，分配（len + 1MB + 1B）的空间；</li>
+<li>惰性空间释放：当缩短字符串时，并不会立即使用内存重分配来回收多出来的字符，而是记录在free属性中；</li>
+</ul>
+</li>
+</ul>
+<h4 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * 双端链表节点 </span></span><br><span class="line"><span class="comment"> */</span>  </span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> &#123;</span>  </span><br><span class="line">    <span class="comment">// 前置节点  </span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> *<span class="title">prev</span>;</span>  </span><br><span class="line">    <span class="comment">// 后置节点  </span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">listNode</span> *<span class="title">next</span>;</span>  </span><br><span class="line">    <span class="comment">// 节点的值  </span></span><br><span class="line">    <span class="keyword">void</span> *value;  </span><br><span class="line">&#125; listNode;  </span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * 双端链表结构 </span></span><br><span class="line"><span class="comment"> */</span>  </span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">list</span> &#123;</span>  </span><br><span class="line">    <span class="comment">// 表头节点  </span></span><br><span class="line">    listNode *head;  </span><br><span class="line">    <span class="comment">// 表尾节点  </span></span><br><span class="line">    listNode *tail;  </span><br><span class="line">    <span class="comment">// 节点值复制函数  </span></span><br><span class="line">    <span class="keyword">void</span> *(*dup)(<span class="keyword">void</span> *ptr);  </span><br><span class="line">    <span class="comment">// 节点值释放函数  </span></span><br><span class="line">    <span class="keyword">void</span> (*<span class="built_in">free</span>)(<span class="keyword">void</span> *ptr);  </span><br><span class="line">    <span class="comment">// 节点值对比函数  </span></span><br><span class="line">    <span class="keyword">int</span> (*match)(<span class="keyword">void</span> *ptr, <span class="keyword">void</span> *key);  </span><br><span class="line">    <span class="comment">// 链表所包含的节点数量  </span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> len;  </span><br><span class="line">&#125; <span class="built_in">list</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * 字典 </span></span><br><span class="line"><span class="comment"> */</span>  </span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dict</span> &#123;</span>  </span><br><span class="line">    <span class="comment">// 类型特定函数，Redis为不同用途的字典设置不同的类型特定函数  </span></span><br><span class="line">    dictType *type;  </span><br><span class="line">    <span class="comment">// 私有数据，传递给特定类型函数的可选参数  </span></span><br><span class="line">    <span class="keyword">void</span> *privdata;  </span><br><span class="line">    <span class="comment">// 哈希表，一般情况下字典使用ht[0]，ht[1]只会在对ht[0]进行rehash时使用  </span></span><br><span class="line">    dictht ht[<span class="number">2</span>];  </span><br><span class="line">    <span class="comment">// rehash 索引  </span></span><br><span class="line">    <span class="comment">// 当 rehash 不在进行时，值为 -1  </span></span><br><span class="line">    <span class="keyword">int</span> rehashidx; <span class="comment">/* rehashing not in progress if rehashidx == -1 */</span>  </span><br><span class="line">    <span class="comment">// 目前正在运行的安全迭代器的数量  </span></span><br><span class="line">    <span class="keyword">int</span> iterators; <span class="comment">/* number of iterators currently running */</span>  </span><br><span class="line">&#125; dict;  </span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * 哈希表 </span></span><br><span class="line"><span class="comment"> * 每个字典都使用两个哈希表，从而实现渐进式 rehash 。 </span></span><br><span class="line"><span class="comment"> */</span>  </span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictht</span> &#123;</span>      </span><br><span class="line">    <span class="comment">// 哈希表数组，存放具体的键值对  </span></span><br><span class="line">    dictEntry **table;  </span><br><span class="line">    <span class="comment">// 哈希表大小  </span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> size;      </span><br><span class="line">    <span class="comment">// 哈希表大小掩码，用于计算索引值  </span></span><br><span class="line">    <span class="comment">// 总是等于 size - 1  </span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> sizemask;  </span><br><span class="line">    <span class="comment">// 该哈希表已有节点的数量  </span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> used;  </span><br><span class="line">&#125; dictht;  </span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * 哈希表节点 </span></span><br><span class="line"><span class="comment"> */</span>  </span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> &#123;</span>      </span><br><span class="line">    <span class="comment">// 键  </span></span><br><span class="line">    <span class="keyword">void</span> *key;  </span><br><span class="line">    <span class="comment">// 值  </span></span><br><span class="line">    <span class="keyword">union</span> &#123;  </span><br><span class="line">        <span class="keyword">void</span> *val;  </span><br><span class="line">        <span class="keyword">uint64_t</span> u64;  </span><br><span class="line">        <span class="keyword">int64_t</span> s64;  </span><br><span class="line">    &#125; v;  </span><br><span class="line">    <span class="comment">// 指向下个哈希表节点，形成链表  </span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">dictEntry</span> *<span class="title">next</span>;</span>  </span><br><span class="line">&#125; dictEntry;</span><br></pre></td></tr></table></figure>
+<h4 id="跳跃表（skiplist）"><a href="#跳跃表（skiplist）" class="headerlink" title="跳跃表（skiplist）"></a>跳跃表（skiplist）</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * 跳跃表 </span></span><br><span class="line"><span class="comment"> */</span>  </span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplist</span> &#123;</span>  </span><br><span class="line">    <span class="comment">// 表头节点和表尾节点  </span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">header</span>, *<span class="title">tail</span>;</span>  </span><br><span class="line">    <span class="comment">// 表中节点的数量  </span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> length;  </span><br><span class="line">    <span class="comment">// 表中层数最大的节点的层数，表头结点的层数不计算在内  </span></span><br><span class="line">    <span class="keyword">int</span> level;  </span><br><span class="line">&#125; zskiplist;  </span><br><span class="line"></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment"> * 跳跃表节点 </span></span><br><span class="line"><span class="comment"> */</span>  </span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> &#123;</span>  </span><br><span class="line">    <span class="comment">// 成员对象  </span></span><br><span class="line">    robj *obj;  </span><br><span class="line">    <span class="comment">// 分值，跳跃表中节点按各自所保存的分值从小到大排列  </span></span><br><span class="line">    <span class="keyword">double</span> score;  </span><br><span class="line">    <span class="comment">// 后退指针，指向当前节点的前一个节点  </span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">backward</span>;</span>  </span><br><span class="line">    <span class="comment">// 层，每次创建一个新节点，程序按幂次定律随机生成一个1~32的值作为level数组的大小（层高度）  </span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistLevel</span> &#123;</span>  </span><br><span class="line">        <span class="comment">// 前进指针  </span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">zskiplistNode</span> *<span class="title">forward</span>;</span>  </span><br><span class="line">        <span class="comment">// 跨度，前进指针所指向的节点和当前节点的距离  </span></span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> span;  </span><br><span class="line">    &#125; level[];  </span><br><span class="line">&#125; zskiplistNode;</span><br></pre></td></tr></table></figure>
+<h4 id="整数集合（intset）"><a href="#整数集合（intset）" class="headerlink" title="整数集合（intset）"></a>整数集合（intset）</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">intset</span> &#123;</span>      </span><br><span class="line">    <span class="comment">// 编码方式  </span></span><br><span class="line">    <span class="keyword">uint32_t</span> encoding;  </span><br><span class="line">    <span class="comment">// 集合包含的元素数量  </span></span><br><span class="line">    <span class="keyword">uint32_t</span> length;  </span><br><span class="line">    <span class="comment">// 保存元素的数组，各项在数组中按值大小有序地排序并且不包含重得项  </span></span><br><span class="line">    <span class="keyword">int8_t</span> contents[];  </span><br><span class="line">&#125; intset;</span><br></pre></td></tr></table></figure>
+<h4 id="压缩列表（ziplist）"><a href="#压缩列表（ziplist）" class="headerlink" title="压缩列表（ziplist）"></a>压缩列表（ziplist）</h4><h3 id="redis优势"><a href="#redis优势" class="headerlink" title="redis优势"></a>redis优势</h3><ul>
+<li>Redis不仅仅支持简单的k/v类型的数据，同时还提供list，set，zset，hash等数据结构的存储。</li>
+<li>Redis支持数据的备份，即master-slave模式的数据备份。</li>
+<li>Redis支持数据的持久化，可以将内存中的数据保持在磁盘中，重启的时候可以再次加载进行使用。</li>
+</ul>
+<h3 id="持久化"><a href="#持久化" class="headerlink" title="持久化"></a>持久化</h3><ul>
+<li>内存快照（snapshotting）</li>
+</ul>
+<p>每个一段时间进行一次内存快照，把内存中的数据写入二进制文件中（*.rdb）；save，在主进程操作，阻塞主进程，不能快速响应请求；bgsave，fork一个子进程操作，主进程继续处理请求，完成后通知主进程；</p>
+<p>缺点：每次都是全部内存数据写入，数据量大会操作频繁，影响性能。</p>
+<ul>
+<li>日志追加（append only file）</li>
+</ul>
+<p>把增加、修改数据的命令通过write函数追加到文件尾部（*.aof）；redis重启时读取所有命令并且执行，从而把数据写入内存；</p>
+<p>缺点：日志文件膨胀比较快，如nums自增100次，恢复只需要一次set nums 100，其他命令多余。</p>
+<p>优化：bgrewriteaof命令，类似于内存快照方式，把命令保存到临时文件，最后再替换原来的日志文件。</p>
+<h3 id="主从复制"><a href="#主从复制" class="headerlink" title="主从复制"></a>主从复制</h3><table>
+<thead>
+<tr>
+<th>master服务器</th>
+<th>slave服务器</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>1.连接（或重新连接）主服务器，发送同步（SYNC）命令</td>
+</tr>
+<tr>
+<td>2.开始执行bgsave，生成快照文件（.rdb），然后向slave服务器发送，并使用缓冲区记录后续执行的写命令</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>3.丢弃所有旧数据，接收并载入master服务器发来的快照文件，解释并处理完毕后，正常接收命令</td>
+</tr>
+<tr>
+<td>4.继续发送缓冲区记录的后续写命令；发送完毕后，每执行一个新的写命令就再发送一次</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>5.接收并执行每一个写命令</td>
+</tr>
+</tbody>
+</table>
+<h2 id="hash算法及数据库实现"><a href="#hash算法及数据库实现" class="headerlink" title="hash算法及数据库实现"></a>hash算法及数据库实现</h2><blockquote>
+<p>把任意长度的输入，通过hash算法变成固定长度的输出，输出的值就是hash的值。</p>
+</blockquote>
+
+        </div>
+
+        
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/note/">note</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/">php</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/03/01/笔记/PHP核心技术与最佳实践/&title=《PHP核心技术与最佳实践》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/03/01/笔记/PHP核心技术与最佳实践/&title=《PHP核心技术与最佳实践》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/03/01/笔记/PHP核心技术与最佳实践/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《PHP核心技术与最佳实践》 — Zfd's blog.&url=https://zfd.github.io/2018/03/01/笔记/PHP核心技术与最佳实践/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/03/01/笔记/PHP核心技术与最佳实践/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/03/01/linux/grep命令/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">grep命令</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/02/25/设计模式/设计模式/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">设计模式</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <!-- todo hide
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    -->
+    <div class="bottom">
+        <p><span>zfd &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/03/01/笔记/PHP核心技术与最佳实践/&title=《PHP核心技术与最佳实践》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/03/01/笔记/PHP核心技术与最佳实践/&title=《PHP核心技术与最佳实践》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/03/01/笔记/PHP核心技术与最佳实践/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《PHP核心技术与最佳实践》 — Zfd's blog.&url=https://zfd.github.io/2018/03/01/笔记/PHP核心技术与最佳实践/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/03/01/笔记/PHP核心技术与最佳实践/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACrUlEQVR42u3a0U4jQQwEwPz/T3OvSCSh254BTqp9ikjYuCbS2rL9eMTXx6er/cznv+Tvfr3b+29fXXh4eHiL0L9e7z/z6m6z1/t4nkSFh4eHd42XB5o/uNvHekLKY8bDw8P7O7yP8koYeZLAw8PD+x95p5oIp4pyPDw8vN/iteVs0tJNiulZg/hKrwUPDw+vq3KjKdLfeX1lvoeHh4e3nqq37dQ2kbx/oLeDsSd3w8PDw7vA24ymNqHn4eZl98tP4uHh4R3ltUtUyTDsxlrAcE0BDw8P7xovH02dKnk3x5ffBw8PD+8Gb7ZclTyskzJ607YYbkbg4eHhrXltELP1gvbI9ikKDw8P7x4vqT9Xy0zl8kF+xMPVKzw8PLw179SwP2kQzFYQ8gSAh4eH95O8/NG8GUrNBmZtJHh4eHi3ebMbzf4yW7HatHTx8PDwfobXtnrbUrttQ9TdlHwMhoeHh7fgzQb87YBq07yYJSQ8PDy8G7yklbBfFGgPNCmmo4YIHh4e3gXe2WTQlrnt8eWF/sskgYeHh7fm5U3VWViz6j5v736TnPDw8PAu8NqR0qyMnq1zFb2T94kEDw8P7wIvCX3GPnV87dE82l8GDw8PL+bl46XZuCtv/p69Jx4eHt493iwxzMZdbXCn8Hh4eHg3eG3x2g6i2lbFJhUd2/nCw8PDi9sQeaCbtkU7YGvTxpPEgIeHh3eBV/zDKCXkI7RZYnjMfh88PDy8kne26bBJD8m7+cHh4eHh3eO1K03tWkCyCrBp8h6A4eHh4Y14bTI4NRLL5/ttWwQPDw/vZ3jJl81K2NvZ7Jv2Lh4eHt4f4LUt3Vk7eBbPgcSAh4eHd423GWVtWht5sxgPDw/vNm9/600zIg+3XjXAw8PDu8Bry9nVY7rE3GiO4OHh4S14/wChw+Qps2RzKQAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.7.2"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.7.2" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>树 | Zfd&#39;s blog.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    
+    <meta name="keywords" content="tree">
+    <meta name="description" content="度：指一个节点拥有子节点的个数。深度：树的层数，根节点为第一层。叶子节点：度为0的节点，即没有子节点的节点。  树树的每一个节点，可以有N个子节点，但是每个子节点只有一个前驱节点。 二叉树除了子节点外，每个节点有两个分支，左右子树，每个节点最大度数为2； 满二叉树国内定义： 一个二叉树，每一层的节点数都达到最大值。（看上去就是一个三角形） 国外定义： 一个二叉树，非叶子节点度数都是2。（要么度为">
+<meta name="keywords" content="tree">
+<meta property="og:type" content="article">
+<meta property="og:title" content="树">
+<meta property="og:url" content="https://zfd.github.io/2018/04/13/数据结构/树/index.html">
+<meta property="og:site_name" content="Zfd&#39;s blog.">
+<meta property="og:description" content="度：指一个节点拥有子节点的个数。深度：树的层数，根节点为第一层。叶子节点：度为0的节点，即没有子节点的节点。  树树的每一个节点，可以有N个子节点，但是每个子节点只有一个前驱节点。 二叉树除了子节点外，每个节点有两个分支，左右子树，每个节点最大度数为2； 满二叉树国内定义： 一个二叉树，每一层的节点数都达到最大值。（看上去就是一个三角形） 国外定义： 一个二叉树，非叶子节点度数都是2。（要么度为">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-22T09:48:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="树">
+<meta name="twitter:description" content="度：指一个节点拥有子节点的个数。深度：树的层数，根节点为第一层。叶子节点：度为0的节点，即没有子节点的节点。  树树的每一个节点，可以有N个子节点，但是每个子节点只有一个前驱节点。 二叉树除了子节点外，每个节点有两个分支，左右子树，每个节点最大度数为2； 满二叉树国内定义： 一个二叉树，每一层的节点数都达到最大值。（看上去就是一个三角形） 国外定义： 一个二叉树，非叶子节点度数都是2。（要么度为">
+    
+        <link rel="alternate" type="application/atom+xml" title="Zfd&#39;s blog." href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/icon_trans.png">
+    <link rel="stylesheet" href="/css/style.css?v=1.7.2">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/icon.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zfd</h5>
+          <a href="mailto:zf.dong@qq.com" title="zf.dong@qq.com" class="mail">zf.dong@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                首页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zfd" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">树</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <!-- todo hide -->
+        <a href="javascript:;" style="display:none;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">树</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-04-13T09:54:56.000Z" itemprop="datePublished" class="page-time">
+  2018-04-13
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/数据结构/">数据结构</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>目录</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#树"><span class="post-toc-number">1.</span> <span class="post-toc-text">树</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#二叉树"><span class="post-toc-number">2.</span> <span class="post-toc-text">二叉树</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#满二叉树"><span class="post-toc-number">3.</span> <span class="post-toc-text">满二叉树</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#平衡二叉树（二叉排序树）"><span class="post-toc-number">4.</span> <span class="post-toc-text">平衡二叉树（二叉排序树）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#红黑树"><span class="post-toc-number">5.</span> <span class="post-toc-text">红黑树</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#实现"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">实现</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#场景"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">场景</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#B树"><span class="post-toc-number">6.</span> <span class="post-toc-text">B树</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#B-树"><span class="post-toc-number">7.</span> <span class="post-toc-text">B+树</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-数据结构/树"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">树</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-04-13 09:54:56" datetime="2018-04-13T09:54:56.000Z"  itemprop="datePublished">2018-04-13</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/数据结构/">数据结构</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>度：指一个节点拥有子节点的个数。<br>深度：树的层数，根节点为第一层。<br>叶子节点：度为0的节点，即没有子节点的节点。</p>
+</blockquote>
+<h2 id="树"><a href="#树" class="headerlink" title="树"></a>树</h2><p>树的每一个节点，可以有N个子节点，但是每个子节点只有一个前驱节点。</p>
+<h2 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h2><p>除了子节点外，每个节点有两个分支，左右子树，每个节点最大度数为2；</p>
+<h2 id="满二叉树"><a href="#满二叉树" class="headerlink" title="满二叉树"></a>满二叉树</h2><p>国内定义：</p>
+<p>一个二叉树，每一层的节点数都达到最大值。（看上去就是一个三角形）</p>
+<p>国外定义：</p>
+<p>一个二叉树，非叶子节点度数都是2。（要么度为0，要么度为2）</p>
+<h2 id="平衡二叉树（二叉排序树）"><a href="#平衡二叉树（二叉排序树）" class="headerlink" title="平衡二叉树（二叉排序树）"></a>平衡二叉树（二叉排序树）</h2><p>树的左右子树高度差不超过1，空树也是平衡二叉树；左子节点比父节点小，父节点比右子节点小。</p>
+<p>常用实现方法：红黑树、AVL等。</p>
+<h2 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h2><p>也是平衡二叉树，C++的map、set都是红黑树实现的。</p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>插入、删除，会用左旋、右旋维持树的平衡。</p>
+<h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><p>内存排序。</p>
+<h2 id="B树"><a href="#B树" class="headerlink" title="B树"></a>B树</h2><p>属于多叉树（平衡多路查找树），用在磁盘文件组织，如数据库索引。</p>
+<p>相比平衡二叉树，每个节点包含的关键字增多了，层级减少了，从而减少数据查找次数和复杂度。</p>
+<h2 id="B-树"><a href="#B-树" class="headerlink" title="B+树"></a>B+树</h2><p>B树的升级版，充分利用节点空间，让查询速度更稳定，接近于二叉法查找。</p>
+<p>B+树与B树的区别：</p>
+<ul>
+<li>B+树的非叶子节点，不保存关键字记录的指针，每个节点所能保存的关键字个数大大增加；</li>
+<li>B+树的叶子节点，保存了父节点所有关键字和关键字记录的指针，每个叶子节点的关键字从小到大链接；</li>
+<li>B+树的根节点关键字数量和其叶子节点个数相等；</li>
+<li>B+的非叶子节点只进行数据索引，不会存实际的关键字记录的指针，所有数据地址必须要到叶子节点才能获取到，所以每次数据查询的次数都一样；</li>
+</ul>
+
+        </div>
+
+        
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tree/">tree</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/04/13/数据结构/树/&title=《树》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/04/13/数据结构/树/&title=《树》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/04/13/数据结构/树/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《树》 — Zfd's blog.&url=https://zfd.github.io/2018/04/13/数据结构/树/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/04/13/数据结构/树/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/04/17/服务器/redis集群/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">redis集群</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/04/12/概念/写时复制/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">写时复制</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <!-- todo hide
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    -->
+    <div class="bottom">
+        <p><span>zfd &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/04/13/数据结构/树/&title=《树》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/04/13/数据结构/树/&title=《树》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/04/13/数据结构/树/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《树》 — Zfd's blog.&url=https://zfd.github.io/2018/04/13/数据结构/树/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/04/13/数据结构/树/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJElEQVR42u3ay26EMAwF0Pn/n6ZStyPotQ2VSE5WI8pkOCxcP/L5xOv4Xd9Xvtf3/Wefr3f7PLEwMDBeyzgu19mjnF25a4d8ZwwMjH0Y10E2v+f6W9fBNNnh9DoGBgZGkLQdwUp4GBgYGE8E3PyvyavBwMDAmBSxearXK2uvqbfV4hgYGC9kVAcD//n5wfkGBgbGSxhHa+Xl7vV387HoH3tiYGAszchbadXjF/OjFfluGBgY+zCqxyCSw2F50y3f7fTVY2BgLM2YP+4k+Zv8G8DAwNiBkQe+SRvues9eyC48BAYGxqKMvEydDxiqA9TTriEGBsaijHvng0kZfFeQxcDA2IcxH1UWquS43V9uxmFgYGzASNLBvCWXBM1kh0KAxsDAWJpRDZQTfP5bvdMUGBgYazOqw8unw2tv8ICBgbEqo7d1njL2GmrJlc883mNgYLyKkf9870BG0m7rNf5Ou4YYGBgLMSbFam9ImSeaeaDHwMDYgVE9PDEHT9LNQrsNAwNjUUaSeE2CZjU0N0tZDAyMpRnVUNtskI2DcmG+gYGBsQQjv6kXCvPStxqsMTAwdmAcxVVNKPMW22QsgYGBsTYjX72UsZc45ikjBgbGPozqiLF3RKOXAhbeNwYGxgaM3umMXkLZi/1/8DAwMDBaDbh5mVqgYmBgYIwD610lMQYGxs6M/BhrMgy4d/AZfQsDA2NpxiQo52nfpPRNBqIYGBiLMn4A6C0i4CoFB8YAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.7.2"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.7.2" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>grep命令 | Zfd&#39;s blog.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    
+    <meta name="keywords" content="linux,grep">
+    <meta name="description" content="主要用来查文件内容。  12345678910111213141516171819202122232425-a 不要忽略二进制数据。-A&amp;lt;显示列数&amp;gt; 除了显示符合范本样式的那一行之外，并显示该行之后的内容。-b 在显示符合范本样式的那一行之外，并显示该行之前的内容。-c 计算符合范本样式的列数。-C&amp;lt;显示列数&amp;gt;或-&amp;lt;显示列数&amp;gt;  除了显示符合范本样式的那一列之">
+<meta name="keywords" content="linux,grep">
+<meta property="og:type" content="article">
+<meta property="og:title" content="grep命令">
+<meta property="og:url" content="https://zfd.github.io/2018/03/01/linux/grep命令/index.html">
+<meta property="og:site_name" content="Zfd&#39;s blog.">
+<meta property="og:description" content="主要用来查文件内容。  12345678910111213141516171819202122232425-a 不要忽略二进制数据。-A&amp;lt;显示列数&amp;gt; 除了显示符合范本样式的那一行之外，并显示该行之后的内容。-b 在显示符合范本样式的那一行之外，并显示该行之前的内容。-c 计算符合范本样式的列数。-C&amp;lt;显示列数&amp;gt;或-&amp;lt;显示列数&amp;gt;  除了显示符合范本样式的那一列之">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-22T09:48:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="grep命令">
+<meta name="twitter:description" content="主要用来查文件内容。  12345678910111213141516171819202122232425-a 不要忽略二进制数据。-A&amp;lt;显示列数&amp;gt; 除了显示符合范本样式的那一行之外，并显示该行之后的内容。-b 在显示符合范本样式的那一行之外，并显示该行之前的内容。-c 计算符合范本样式的列数。-C&amp;lt;显示列数&amp;gt;或-&amp;lt;显示列数&amp;gt;  除了显示符合范本样式的那一列之">
+    
+        <link rel="alternate" type="application/atom+xml" title="Zfd&#39;s blog." href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/icon_trans.png">
+    <link rel="stylesheet" href="/css/style.css?v=1.7.2">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/icon.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zfd</h5>
+          <a href="mailto:zf.dong@qq.com" title="zf.dong@qq.com" class="mail">zf.dong@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                首页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zfd" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">grep命令</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <!-- todo hide -->
+        <a href="javascript:;" style="display:none;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">grep命令</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-03-01T14:10:38.000Z" itemprop="datePublished" class="page-time">
+  2018-03-01
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/linux/">linux</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+
+<article id="post-linux/grep命令"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">grep命令</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-03-01 14:10:38" datetime="2018-03-01T14:10:38.000Z"  itemprop="datePublished">2018-03-01</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/linux/">linux</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>主要用来查文件内容。</p>
+</blockquote>
+<figure class="highlight haml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">-<span class="ruby">a 不要忽略二进制数据。</span></span><br><span class="line"><span class="ruby">-A&lt;显示列数&gt; 除了显示符合范本样式的那一行之外，并显示该行之后的内容。</span></span><br><span class="line"><span class="ruby">-b 在显示符合范本样式的那一行之外，并显示该行之前的内容。</span></span><br><span class="line"><span class="ruby">-c 计算符合范本样式的列数。</span></span><br><span class="line"><span class="ruby">-C&lt;显示列数&gt;或-&lt;显示列数&gt;  除了显示符合范本样式的那一列之外，并显示该列之前后的内容。</span></span><br><span class="line"><span class="ruby">-d&lt;进行动作&gt; 当指定要查找的是目录而非文件时，必须使用这项参数，否则grep命令将回报信息并停止动作。</span></span><br><span class="line"><span class="ruby">-e&lt;范本样式&gt; 指定字符串作为查找文件内容的范本样式。</span></span><br><span class="line"><span class="ruby">-E 将范本样式为延伸的普通表示法来使用，意味着使用能使用扩展正则表达式。</span></span><br><span class="line"><span class="ruby">-f&lt;范本文件&gt; 指定范本文件，其内容有一个或多个范本样式，让grep查找符合范本条件的文件内容，格式为每一列的范本样式。</span></span><br><span class="line"><span class="ruby">-F 将范本样式视为固定字符串的列表。</span></span><br><span class="line"><span class="ruby">-G 将范本样式视为普通的表示法来使用。</span></span><br><span class="line"><span class="ruby">-h 在显示符合范本样式的那一列之前，不标示该列所属的文件名称。</span></span><br><span class="line"><span class="ruby">-H 在显示符合范本样式的那一列之前，标示该列的文件名称。</span></span><br><span class="line"><span class="ruby">-i 忽略字符大小写的差别。</span></span><br><span class="line"><span class="ruby">-l 列出文件内容符合指定的范本样式的文件名称。</span></span><br><span class="line"><span class="ruby">-L 列出文件内容不符合指定的范本样式的文件名称。</span></span><br><span class="line"><span class="ruby">-n 在显示符合范本样式的那一列之前，标示出该列的编号。</span></span><br><span class="line"><span class="ruby">-q 不显示任何信息。</span></span><br><span class="line"><span class="ruby">-R/-r 此参数的效果和指定“-d recurse”参数相同。</span></span><br><span class="line"><span class="ruby">-s 不显示错误信息。</span></span><br><span class="line"><span class="ruby">-v 反转查找。</span></span><br><span class="line"><span class="ruby">-w 只显示全字符合的列。</span></span><br><span class="line"><span class="ruby">-x 只显示全列符合的列。</span></span><br><span class="line"><span class="ruby">-y 此参数效果跟“-i”相同。</span></span><br><span class="line"><span class="ruby">-o 只输出文件中匹配到的部分。</span></span><br></pre></td></tr></table></figure>
+
+        </div>
+
+        
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/grep/">grep</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/03/01/linux/grep命令/&title=《grep命令》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/03/01/linux/grep命令/&title=《grep命令》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/03/01/linux/grep命令/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《grep命令》 — Zfd's blog.&url=https://zfd.github.io/2018/03/01/linux/grep命令/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/03/01/linux/grep命令/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/03/01/linux/shell命令/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">shell命令</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/03/01/笔记/PHP核心技术与最佳实践/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">PHP核心技术与最佳实践</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <!-- todo hide
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    -->
+    <div class="bottom">
+        <p><span>zfd &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/03/01/linux/grep命令/&title=《grep命令》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/03/01/linux/grep命令/&title=《grep命令》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/03/01/linux/grep命令/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《grep命令》 — Zfd's blog.&url=https://zfd.github.io/2018/03/01/linux/grep命令/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/03/01/linux/grep命令/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKUlEQVR42u3aS27DMAwFwNz/0ukBmgiPpF3U0mhlBI6t8YLgR69XvN5f1u978uv18193LAwMjMcy3suVbGtN+nZn/t7kI2JgYJzA+BbB1ttaw9ahM6cm/8XAwMDIg2A1fK/xGBgYGFVGEljn28XAwMCYFLFRMdkqYieFLgYGxgmMvOv+99e3zDcwMDAexZiUoJNAObn/wxMwMDC2Zlw1wkxK4klbLUpAMTAwNmUkg8n5K3tHNxIABgbGOYxJqpeAm43+PLhjYGAcz5iMIefjhGa7DQMDYyNGHtqSPnzvLUlQLs9jMTAwNmJUk7Ze0+2qAUN0rg0DA2M7Ri+JnAfi6lbWSSoGBsYJjLzR3xt2VkcFeSFd6NhhYGA8nJEExEmxmn+gfA8YGBjnMHqDw15Y7H2aC5JCDAyMLRhXpW7VUWg11DZrXAwMjC0YSUO/OirotdKqgA8jTAwMjE0Zk9fnvF7bLiplMTAwtmbkpeZkSFl9fjUZxcDAOI3Ra/df1XTLw26hd4iBgbERI2/cVw+n5vi8lP16ZgQDA2NTRhJee4VotbidH+PAwMDYj/Eurjy9S37vBfFXNXJjYGA8nDEfNCahttqwSxpwzZEGBgbGYxm9A155UO4dC6v+CwMD4wRGtYjtjTnz0rd8jAwDAwMjHi4md/ZK5agix8DAwAiSv0kAre4KAwPjNMZ9KV210E2efEu7DQMD4x8zekccJs21XgNufY2BgbEp4wcipMxSQtLCMQAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.7.2"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.7.2" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

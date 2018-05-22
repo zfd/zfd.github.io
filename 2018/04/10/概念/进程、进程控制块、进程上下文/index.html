@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>进程、进程控制块、进程上下文 | Zfd&#39;s blog.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    
+    <meta name="keywords" content="process,thread,pcb">
+    <meta name="description" content="进程 进程：程序执行的一个实例； 线程：进程中执行的每个任务； 进程是资源分配的基本概念，是调度运行的基本单位； 进程至少有一个线程； 父子进程使用进程间通信机制，进程内线程通过读取、写入数据到进程变量来通信；  进程间通信进程控制块（PCB） PCB：描述和控制进程运行的一个数据结构，是进程存在的唯一标识。  组成 进程标识信息：内部标识符（供系统使用）、外部标识符（供用户进程访问）； 处理机状">
+<meta name="keywords" content="process,thread,pcb">
+<meta property="og:type" content="article">
+<meta property="og:title" content="进程、进程控制块、进程上下文">
+<meta property="og:url" content="https://zfd.github.io/2018/04/10/概念/进程、进程控制块、进程上下文/index.html">
+<meta property="og:site_name" content="Zfd&#39;s blog.">
+<meta property="og:description" content="进程 进程：程序执行的一个实例； 线程：进程中执行的每个任务； 进程是资源分配的基本概念，是调度运行的基本单位； 进程至少有一个线程； 父子进程使用进程间通信机制，进程内线程通过读取、写入数据到进程变量来通信；  进程间通信进程控制块（PCB） PCB：描述和控制进程运行的一个数据结构，是进程存在的唯一标识。  组成 进程标识信息：内部标识符（供系统使用）、外部标识符（供用户进程访问）； 处理机状">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-22T09:48:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="进程、进程控制块、进程上下文">
+<meta name="twitter:description" content="进程 进程：程序执行的一个实例； 线程：进程中执行的每个任务； 进程是资源分配的基本概念，是调度运行的基本单位； 进程至少有一个线程； 父子进程使用进程间通信机制，进程内线程通过读取、写入数据到进程变量来通信；  进程间通信进程控制块（PCB） PCB：描述和控制进程运行的一个数据结构，是进程存在的唯一标识。  组成 进程标识信息：内部标识符（供系统使用）、外部标识符（供用户进程访问）； 处理机状">
+    
+        <link rel="alternate" type="application/atom+xml" title="Zfd&#39;s blog." href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/icon_trans.png">
+    <link rel="stylesheet" href="/css/style.css?v=1.7.2">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/icon.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zfd</h5>
+          <a href="mailto:zf.dong@qq.com" title="zf.dong@qq.com" class="mail">zf.dong@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                首页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zfd" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">进程、进程控制块、进程上下文</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <!-- todo hide -->
+        <a href="javascript:;" style="display:none;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">进程、进程控制块、进程上下文</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-04-09T22:23:07.000Z" itemprop="datePublished" class="page-time">
+  2018-04-09
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/概念/">概念</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>目录</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#进程"><span class="post-toc-number">1.</span> <span class="post-toc-text">进程</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#进程间通信"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">进程间通信</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#进程控制块（PCB）"><span class="post-toc-number">2.</span> <span class="post-toc-text">进程控制块（PCB）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#组成"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">组成</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#进程上下文"><span class="post-toc-number">3.</span> <span class="post-toc-text">进程上下文</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#进程上下文切换"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">进程上下文切换</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#总结"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">总结</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-概念/进程、进程控制块、进程上下文"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">进程、进程控制块、进程上下文</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-04-09 22:23:07" datetime="2018-04-09T22:23:07.000Z"  itemprop="datePublished">2018-04-09</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/概念/">概念</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><ul>
+<li>进程：程序执行的一个实例；</li>
+<li>线程：进程中执行的每个任务；</li>
+<li>进程是资源分配的基本概念，是调度运行的基本单位；</li>
+<li>进程至少有一个线程；</li>
+<li>父子进程使用进程间通信机制，进程内线程通过读取、写入数据到进程变量来通信；</li>
+</ul>
+<h3 id="进程间通信"><a href="#进程间通信" class="headerlink" title="进程间通信"></a>进程间通信</h3><h2 id="进程控制块（PCB）"><a href="#进程控制块（PCB）" class="headerlink" title="进程控制块（PCB）"></a>进程控制块（PCB）</h2><blockquote>
+<p>PCB：描述和控制进程运行的一个数据结构，是进程存在的唯一标识。</p>
+</blockquote>
+<h3 id="组成"><a href="#组成" class="headerlink" title="组成"></a>组成</h3><ul>
+<li>进程标识信息：内部标识符（供系统使用）、外部标识符（供用户进程访问）；</li>
+<li>处理机状态：主要由处理机的各个寄存器内的信息组成；</li>
+<li>进程调度信息：进程状态、进程优先级、事件、其他信息等；</li>
+<li>进程控制信息：程序和数据地址，进程同步和通信机制，资源清单，链接指针；</li>
+</ul>
+<h2 id="进程上下文"><a href="#进程上下文" class="headerlink" title="进程上下文"></a>进程上下文</h2><blockquote>
+<p>进程上下文：程序的物理实体、支持程序执行的物理环境，合称为进程上下文。</p>
+</blockquote>
+<p>进程是在操作系统支持下执行的，进程执行时需要操作系统为其设置相应的执行环境，如：系统堆栈、地址映像寄存器、程序计数器、打开文件表、相关通用寄存器等。</p>
+<ul>
+<li>上文：已经执行的指令和数据，及在寄存器堆栈中的内容。</li>
+<li>正文：正在执行的。</li>
+<li>下文：待执行的。</li>
+</ul>
+<h3 id="进程上下文切换"><a href="#进程上下文切换" class="headerlink" title="进程上下文切换"></a>进程上下文切换</h3><ul>
+<li>挂起一个进程，将其上下文保存到存储区；</li>
+<li>系统调度，选择一个新的进程，将其上下文恢复；</li>
+<li>继续执行新的进程。</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>进程上下文的切换，也就是如何使寄存器与堆栈中的数据流入流出PCB的存储区。</p>
+<p>进程上下文的切换，涉及系统调度和分配资源，这些都比较耗费CPU时间。</p>
+
+        </div>
+
+        
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/pcb/">pcb</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/process/">process</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/thread/">thread</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/04/10/概念/进程、进程控制块、进程上下文/&title=《进程、进程控制块、进程上下文》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/04/10/概念/进程、进程控制块、进程上下文/&title=《进程、进程控制块、进程上下文》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/04/10/概念/进程、进程控制块、进程上下文/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《进程、进程控制块、进程上下文》 — Zfd's blog.&url=https://zfd.github.io/2018/04/10/概念/进程、进程控制块、进程上下文/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/04/10/概念/进程、进程控制块、进程上下文/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/04/11/数据库/分库、分区、分表、集群/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">分库、分区、分表、集群</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/03/30/服务器/select、poll、epoll/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">select、poll、epoll</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <!-- todo hide
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    -->
+    <div class="bottom">
+        <p><span>zfd &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/04/10/概念/进程、进程控制块、进程上下文/&title=《进程、进程控制块、进程上下文》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/04/10/概念/进程、进程控制块、进程上下文/&title=《进程、进程控制块、进程上下文》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/04/10/概念/进程、进程控制块、进程上下文/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《进程、进程控制块、进程上下文》 — Zfd's blog.&url=https://zfd.github.io/2018/04/10/概念/进程、进程控制块、进程上下文/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/04/10/概念/进程、进程控制块、进程上下文/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACvklEQVR42u3awY7iMBAEUP7/p3elue4SqtrpiJFeTqMAwc8j2U21X6/4+vNzJXf+vd695/qz1/dvvvDw8PBGQ78e3LuvTKjtnWSKkzHj4eHhbfOSxyUDTYZ4/bRkm0nGjIeHh/cNvHxLOKl7k20DDw8P77fwrpfyfJPIS3Y8PDy8b+YlJeyszG23kIS0krXg4eHhxby2AfYNfy/29/Dw8PAOuur5spvfbxtj+Wbwn0/h4eHhLfCScKEtjvMG2CwObkt5PDw8vA1e3rDP22P51jIb7jAWwcPDw7uJlx+falv7J82wtg32IaXGw8PDu5XXBgez5bs9WJCX7NFPAjw8PLybeO2ye3Jkqh1ofpTh7dTg4eHhrfFmkUSySSTh7CzATaYGDw8Pb5u3Uea2G0AbE38o4vHw8PAWeO3g8iDgZKs4P6aAh4eHt8c7aS8lMcH5QYE2kjjKWvDw8PBi3uxnf970Sg5snbS73k4BHh4e3gIv/+JnWmWzwwoRDA8PD+8mXh6J5oFvcs2ekJTjeHh4eM/w2qZUWzTnpXOxgyX/DDw8PLw1XrHUBoz81XYi8rIbDw8Pb48XvVyyZwFEG+8mT8bDw8Pb4+XtpdkSn7f/80kZxhx4eHh4x7x7l+w29p3FxMXU4OHh4S3w2hK5DVjbA1JtQy7ZePDw8PCe5F0v5RtTc7KpFKfJ8PDw8I55ycKdHClInjybvuunfSip8fDw8B7nnSzQbQxR5M35MQU8PDy8W3mzn/d5uNBWtvkURxEzHh4e3gIvv/IQ4d6BJoyoAYaHh4d3K6/dDNrgoP3U+VEDPDw8vGd4bWzaxgo5oN278PDw8H4XL48k2hBhFli82j0KDw8Pb5nXLvH5IM5L+bffgoeHh7fGmx0CaAvuk80jmeho5vDw8PCOeW0DLI9o2yZW26+7jjPw8PDwFnh/AXSDac5yg68UAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.7.2"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.7.2" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

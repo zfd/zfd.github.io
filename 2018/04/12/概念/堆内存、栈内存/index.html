@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>堆内存、栈内存 | Zfd&#39;s blog.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    
+    <meta name="keywords" content="heap,stack">
+    <meta name="description" content="进出顺序堆：顺序随意 栈：先进后出 内存分配堆：程序员手动分配，程序不释放，可能在程序结束后由系统回收，如：new，malloc； 栈：编译器自动分配、释放，速度快，存放函数的参数值，局部变量值等； 全局区（静态区）：全局变量、静态变量总是放一块的，初始化时放在同一块区域，未初始化时放在相邻的另一块区域，程序结束由系统释放； 常量区：放常量，程序结束由系统释放； 程序代码区：存放函数体的二进制代码">
+<meta name="keywords" content="heap,stack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="堆内存、栈内存">
+<meta property="og:url" content="https://zfd.github.io/2018/04/12/概念/堆内存、栈内存/index.html">
+<meta property="og:site_name" content="Zfd&#39;s blog.">
+<meta property="og:description" content="进出顺序堆：顺序随意 栈：先进后出 内存分配堆：程序员手动分配，程序不释放，可能在程序结束后由系统回收，如：new，malloc； 栈：编译器自动分配、释放，速度快，存放函数的参数值，局部变量值等； 全局区（静态区）：全局变量、静态变量总是放一块的，初始化时放在同一块区域，未初始化时放在相邻的另一块区域，程序结束由系统释放； 常量区：放常量，程序结束由系统释放； 程序代码区：存放函数体的二进制代码">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-22T09:48:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="堆内存、栈内存">
+<meta name="twitter:description" content="进出顺序堆：顺序随意 栈：先进后出 内存分配堆：程序员手动分配，程序不释放，可能在程序结束后由系统回收，如：new，malloc； 栈：编译器自动分配、释放，速度快，存放函数的参数值，局部变量值等； 全局区（静态区）：全局变量、静态变量总是放一块的，初始化时放在同一块区域，未初始化时放在相邻的另一块区域，程序结束由系统释放； 常量区：放常量，程序结束由系统释放； 程序代码区：存放函数体的二进制代码">
+    
+        <link rel="alternate" type="application/atom+xml" title="Zfd&#39;s blog." href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/icon_trans.png">
+    <link rel="stylesheet" href="/css/style.css?v=1.7.2">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/icon.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zfd</h5>
+          <a href="mailto:zf.dong@qq.com" title="zf.dong@qq.com" class="mail">zf.dong@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                首页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zfd" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">堆内存、栈内存</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <!-- todo hide -->
+        <a href="javascript:;" style="display:none;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">堆内存、栈内存</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-04-11T22:31:33.000Z" itemprop="datePublished" class="page-time">
+  2018-04-11
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/概念/">概念</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>目录</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#进出顺序"><span class="post-toc-number">1.</span> <span class="post-toc-text">进出顺序</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#内存分配"><span class="post-toc-number">2.</span> <span class="post-toc-text">内存分配</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-概念/堆内存、栈内存"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">堆内存、栈内存</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-04-11 22:31:33" datetime="2018-04-11T22:31:33.000Z"  itemprop="datePublished">2018-04-11</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/概念/">概念</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="进出顺序"><a href="#进出顺序" class="headerlink" title="进出顺序"></a>进出顺序</h2><p>堆：顺序随意</p>
+<p>栈：先进后出</p>
+<h2 id="内存分配"><a href="#内存分配" class="headerlink" title="内存分配"></a>内存分配</h2><p>堆：程序员手动分配，程序不释放，可能在程序结束后由系统回收，如：new，malloc；</p>
+<p>栈：编译器自动分配、释放，速度快，存放函数的参数值，局部变量值等；</p>
+<p>全局区（静态区）：全局变量、静态变量总是放一块的，初始化时放在同一块区域，未初始化时放在相邻的另一块区域，程序结束由系统释放；</p>
+<p>常量区：放常量，程序结束由系统释放；</p>
+<p>程序代码区：存放函数体的二进制代码，处理器会到这个区域取值并执行；</p>
+
+        </div>
+
+        
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/heap/">heap</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/stack/">stack</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/04/12/概念/堆内存、栈内存/&title=《堆内存、栈内存》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/04/12/概念/堆内存、栈内存/&title=《堆内存、栈内存》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/04/12/概念/堆内存、栈内存/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《堆内存、栈内存》 — Zfd's blog.&url=https://zfd.github.io/2018/04/12/概念/堆内存、栈内存/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/04/12/概念/堆内存、栈内存/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/04/12/数据库/mysql相关锁/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">mysql相关锁</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/04/11/数据库/分库、分区、分表、集群/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">分库、分区、分表、集群</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <!-- todo hide
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    -->
+    <div class="bottom">
+        <p><span>zfd &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/04/12/概念/堆内存、栈内存/&title=《堆内存、栈内存》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/04/12/概念/堆内存、栈内存/&title=《堆内存、栈内存》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/04/12/概念/堆内存、栈内存/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《堆内存、栈内存》 — Zfd's blog.&url=https://zfd.github.io/2018/04/12/概念/堆内存、栈内存/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/04/12/概念/堆内存、栈内存/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJUlEQVR42u3aS27DMAxF0ex/0+40gFH7PlItIPFqFASuo6MBy48+H7yu2+JP3p///ub++fn9rSVDhoxtGdfjSjfHt/j8fr43GTJkzGH8FsHSzzxcPm+a702GDBkynp9BPwDeTI5JhgwZMmoBN32SFMYyZMiQ0SliCYN/w4Pv4lpchgwZGzLShO8/P//JfEOGDBlbMa5w8UBZG2rWlgwZMs5mpA2ydOi4tnB93o8MGTLOZqzKstIgyzfHS2IZMmScyugnf2mYJo1+/rcyZMg4m0ECIk/meKBcfHAyZMg4mlG7VMExpLmWHu5L2JUhQ8YARtrY4i3+2kEUp6wyZMg4iEGSM9KG44lmep0CHYEMGTIGMMh2VzXx0+El2psMGTKOZvCtk6Zbmmim73k5XBkyZBzN4E23q7TS4WVapcqQIWMOI23lp0lkmlDW3iNDhoyzGZ1mfXwTrT0SKP7fkCFDxrYM0tzn4TUdVfZHpDJkyJjGqN1kqF2nSMvdIODKkCHjaEatHOWXNjrH9AKWIUPGAAZvsaVjxf71C5RKypAhYySjs5WUXUwHZciQMYBRuzaRNvr7ha4MGTImM/giP9xK7PAwtTbylCFDxu6MWrOebK52ljWwDBkyJjA6ga92aaNzISy4bCFDhozBDD5I4AUwL3SDbpwMGTLGM2qtutoQ4uXNMmTIGMDgrfy06OWwNKzLkCFjDoOXjjwsrk0Elw01ZciQsR/jB/q8apiT+kd7AAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.7.2"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.7.2" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

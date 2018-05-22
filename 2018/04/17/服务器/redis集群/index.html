@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>redis集群 | Zfd&#39;s blog.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    
+    <meta name="keywords" content="redis">
+    <meta name="description" content="redis cluster：由多个服务于一个数据集合的redis实例组成的整体，redis实例分布在不同服务器。  集群特点 所有节点相互连接； 集群消息通过集群总线通信，集群总线端口为客户端端口+10000（固定值）； 节点与节点之间通过二进制协议进行通信； 客户端与节点之间通信和平常一样，通过文本协议进行； 集群节点不会代理查询； 数据按照slot存储分布在多个redis实例上； 集群节点挂">
+<meta name="keywords" content="redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis集群">
+<meta property="og:url" content="https://zfd.github.io/2018/04/17/服务器/redis集群/index.html">
+<meta property="og:site_name" content="Zfd&#39;s blog.">
+<meta property="og:description" content="redis cluster：由多个服务于一个数据集合的redis实例组成的整体，redis实例分布在不同服务器。  集群特点 所有节点相互连接； 集群消息通过集群总线通信，集群总线端口为客户端端口+10000（固定值）； 节点与节点之间通过二进制协议进行通信； 客户端与节点之间通信和平常一样，通过文本协议进行； 集群节点不会代理查询； 数据按照slot存储分布在多个redis实例上； 集群节点挂">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-22T09:48:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="redis集群">
+<meta name="twitter:description" content="redis cluster：由多个服务于一个数据集合的redis实例组成的整体，redis实例分布在不同服务器。  集群特点 所有节点相互连接； 集群消息通过集群总线通信，集群总线端口为客户端端口+10000（固定值）； 节点与节点之间通过二进制协议进行通信； 客户端与节点之间通信和平常一样，通过文本协议进行； 集群节点不会代理查询； 数据按照slot存储分布在多个redis实例上； 集群节点挂">
+    
+        <link rel="alternate" type="application/atom+xml" title="Zfd&#39;s blog." href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/img/icon_trans.png">
+    <link rel="stylesheet" href="/css/style.css?v=1.7.2">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu"  >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/icon.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">zfd</h5>
+          <a href="mailto:zf.dong@qq.com" title="zf.dong@qq.com" class="mail">zf.dong@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                首页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/zfd" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">redis集群</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <!-- todo hide -->
+        <a href="javascript:;" style="display:none;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">redis集群</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-04-17T13:33:16.000Z" itemprop="datePublished" class="page-time">
+  2018-04-17
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/服务器/">服务器</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>目录</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#集群特点"><span class="post-toc-number">1.</span> <span class="post-toc-text">集群特点</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#数据结构"><span class="post-toc-number">2.</span> <span class="post-toc-text">数据结构</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#集群通信"><span class="post-toc-number">3.</span> <span class="post-toc-text">集群通信</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#通信端口"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">通信端口</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#通信协议"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">通信协议</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#组建集群（cluster-meet）"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">组建集群（cluster meet）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#消息处理（clusterProcessPacket）"><span class="post-toc-number">3.4.</span> <span class="post-toc-text">消息处理（clusterProcessPacket）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#定时任务（clusterCron）"><span class="post-toc-number">3.5.</span> <span class="post-toc-text">定时任务（clusterCron）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#心跳数据"><span class="post-toc-number">3.6.</span> <span class="post-toc-text">心跳数据</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分区原理"><span class="post-toc-number">4.</span> <span class="post-toc-text">分区原理</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#槽（slot）"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">槽（slot）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#位序列结构"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">位序列结构</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#键哈希标签原理"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">键哈希标签原理</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#请求重定向"><span class="post-toc-number">4.4.</span> <span class="post-toc-text">请求重定向</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#moved错误"><span class="post-toc-number">4.5.</span> <span class="post-toc-text">moved错误</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#ask错误"><span class="post-toc-number">4.6.</span> <span class="post-toc-text">ask错误</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#数据迁移"><span class="post-toc-number">5.</span> <span class="post-toc-text">数据迁移</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#通信故障"><span class="post-toc-number">6.</span> <span class="post-toc-text">通信故障</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#主节点状态fail"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">主节点状态fail</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#多个从节点选主"><span class="post-toc-number">6.1.1.</span> <span class="post-toc-text">多个从节点选主</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#故障转移"><span class="post-toc-number">6.1.2.</span> <span class="post-toc-text">故障转移</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#集群状态fail"><span class="post-toc-number">6.2.</span> <span class="post-toc-text">集群状态fail</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-服务器/redis集群"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">redis集群</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-04-17 13:33:16" datetime="2018-04-17T13:33:16.000Z"  itemprop="datePublished">2018-04-17</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/服务器/">服务器</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <blockquote>
+<p>redis cluster：由多个服务于一个数据集合的redis实例组成的整体，redis实例分布在不同服务器。</p>
+</blockquote>
+<h2 id="集群特点"><a href="#集群特点" class="headerlink" title="集群特点"></a>集群特点</h2><ul>
+<li>所有节点相互连接；</li>
+<li>集群消息通过集群总线通信，集群总线端口为客户端端口+10000（固定值）；</li>
+<li>节点与节点之间通过二进制协议进行通信；</li>
+<li>客户端与节点之间通信和平常一样，通过文本协议进行；</li>
+<li>集群节点不会代理查询；</li>
+<li>数据按照slot存储分布在多个redis实例上；</li>
+<li>集群节点挂掉会自动故障转移；</li>
+<li>可以相对平滑扩容、缩容；</li>
+</ul>
+<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><p>核心结构在cluster.h中定义：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 集群状态，每个节点都保存着一个这样的状态，记录了它们眼中的集群的样子。</span></span><br><span class="line"><span class="comment">// 另外，虽然这个结构主要用于记录集群的属性，但是为了节约资源，</span></span><br><span class="line"><span class="comment">// 有些与节点有关的属性，比如 slots_to_keys 、 failover_auth_count </span></span><br><span class="line"><span class="comment">// 也被放到了这个结构里面。</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">clusterState</span> &#123;</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// 指向当前节点的指针</span></span><br><span class="line">    clusterNode *myself;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 集群当前的状态：是在线还是下线 REDIS_CLUSTER_OK, REDIS_CLUSTER_FAIL, ...</span></span><br><span class="line">    <span class="keyword">int</span> state;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 集群节点名单（包括 myself 节点）</span></span><br><span class="line">    <span class="comment">// 字典的键为节点的名字，字典的值为 clusterNode 结构</span></span><br><span class="line">    dict *nodes;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 记录要从当前节点迁移到目标节点的槽，以及迁移的目标节点</span></span><br><span class="line">    <span class="comment">// migrating_slots_to[i] = NULL 表示槽 i 未被迁移</span></span><br><span class="line">    <span class="comment">// migrating_slots_to[i] = clusterNode_A 表示槽 i 要从本节点迁移至节点 A</span></span><br><span class="line">    clusterNode *migrating_slots_to[REDIS_CLUSTER_SLOTS];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 记录要从源节点迁移到本节点的槽，以及进行迁移的源节点</span></span><br><span class="line">    <span class="comment">// importing_slots_from[i] = NULL 表示槽 i 未进行导入</span></span><br><span class="line">    <span class="comment">// importing_slots_from[i] = clusterNode_A 表示正从节点 A 中导入槽 i</span></span><br><span class="line">    clusterNode *importing_slots_from[REDIS_CLUSTER_SLOTS];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 负责处理各个槽的节点</span></span><br><span class="line">    <span class="comment">// 例如 slots[i] = clusterNode_A 表示槽 i 由节点 A 处理</span></span><br><span class="line">    clusterNode *slots[REDIS_CLUSTER_SLOTS];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 跳跃表，表中以槽作为分值，键作为成员，对槽进行有序排序</span></span><br><span class="line">    <span class="comment">// 当需要对某些槽进行区间（range）操作时，这个跳跃表可以提供方便</span></span><br><span class="line">    <span class="comment">// 具体操作定义在 db.c 里面</span></span><br><span class="line">    zskiplist *slots_to_keys;</span><br><span class="line">    ...</span><br><span class="line">&#125; clusterState;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 节点状态</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">clusterNode</span> &#123;</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// 节点标识</span></span><br><span class="line">    <span class="comment">// 使用各种不同的标识值记录节点的角色（比如主节点或者从节点），</span></span><br><span class="line">    <span class="comment">// 以及节点目前所处的状态（比如在线或者下线）。</span></span><br><span class="line">    <span class="keyword">int</span> flags;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 由这个节点负责处理的槽</span></span><br><span class="line">    <span class="comment">// 一共有 REDIS_CLUSTER_SLOTS / 8 个字节长</span></span><br><span class="line">    <span class="comment">// 每个字节的每个位记录了一个槽的保存状态</span></span><br><span class="line">    <span class="comment">// 位的值为 1 表示槽正由本节点处理，值为 0 则表示槽并非本节点处理</span></span><br><span class="line">    <span class="comment">// 比如 slots[0] 的第一个位保存了槽 0 的保存情况</span></span><br><span class="line">    <span class="comment">// slots[0] 的第二个位保存了槽 1 的保存情况，以此类推</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> slots[REDIS_CLUSTER_SLOTS/<span class="number">8</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 指针数组，指向各个从节点</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">clusterNode</span> **<span class="title">slaves</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果这是一个从节点，那么指向主节点</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">clusterNode</span> *<span class="title">slaveof</span>;</span></span><br><span class="line">    ...</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// clusterLink 包含了与其他节点进行通讯所需的全部信息</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">clusterLink</span> &#123;</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="comment">// TCP 套接字描述符</span></span><br><span class="line">    <span class="keyword">int</span> fd;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 与这个连接相关联的节点，如果没有的话就为 NULL</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">clusterNode</span> *<span class="title">node</span>;</span></span><br><span class="line">    ...</span><br><span class="line">&#125; clusterLink;</span><br></pre></td></tr></table></figure>
+<h2 id="集群通信"><a href="#集群通信" class="headerlink" title="集群通信"></a>集群通信</h2><h3 id="通信端口"><a href="#通信端口" class="headerlink" title="通信端口"></a>通信端口</h3><p>集群中每个redis实例，都会使用两个tcp端口：</p>
+<ul>
+<li>一个给客户端（redis-cli或应用程序等）使用；</li>
+<li>另一个用于集群中实例相互通信的内部总线端口，此端口比第一个大10000。</li>
+</ul>
+<h3 id="通信协议"><a href="#通信协议" class="headerlink" title="通信协议"></a>通信协议</h3><blockquote>
+<p>Redis集群采用P2P的Gossip（流言）协议，Gossip协议工作原理就是节点彼此不断通信交换信息，一段时间后所有的节点都会知道集群完整的信息，这种方式类似流言传播。</p>
+</blockquote>
+<ul>
+<li>集群中每个节点通过一定规则挑选要通信的节点，每个节点可能知道全部节点，也可能仅知道部分节点，只要这些节点彼此可以正常通信，最终它们会达到一致的状态。</li>
+<li>当节点出故障、新节点加入、主从角色变化、槽信息变更等事件发生时，通过不断的ping/pong消息通信，经过一段时间后所有的节点都会知道整个集群全部节点的最新状态，从而达到集群状态同步的目的。</li>
+</ul>
+<h3 id="组建集群（cluster-meet）"><a href="#组建集群（cluster-meet）" class="headerlink" title="组建集群（cluster meet）"></a>组建集群（cluster meet）</h3><blockquote>
+<p>组建集群，把各个独立的节点链接起来，构成一个包含多个节点的集群。</p>
+</blockquote>
+<p>命令：cluster meet <ip> <port></port></ip></p>
+<ol>
+<li>客户端向节点A发送cluster meet <nodeb ip=""> <nodeb port="">命令；</nodeb></nodeb></li>
+<li>节点A为节点B创建一个clusterNode结构，并添加到clusterState.nodes字典里面，再向节点B发送meet消息；</li>
+<li>节点B收到meet消息，会为节点A添加一个clusterNode结构，并添加到clusterState.nodes字典里面，再向节点A返回一条pong消息；</li>
+<li>节点A收到pong消息，再向节点B发送ping消息；</li>
+<li>节点B收到ping消息，握手完成；</li>
+<li>之后，节点A会将节点B的信息通过Gossip协议传播给集群中的其他节点，让其他节点也跟节点B握手；</li>
+<li>最终，节点B会被集群中所有节点认识。</li>
+</ol>
+<h3 id="消息处理（clusterProcessPacket）"><a href="#消息处理（clusterProcessPacket）" class="headerlink" title="消息处理（clusterProcessPacket）"></a>消息处理（clusterProcessPacket）</h3><ul>
+<li>更新接收消息计数器</li>
+<li>查找发送者节点并且不是handshake节点</li>
+<li>更新自己的epoch和slave的offset信息</li>
+<li>处理MEET消息，使加入集群</li>
+<li>从goosip中发现未知节点，发起handshake</li>
+<li>对PING，MEET回复PONG</li>
+<li>根据收到的心跳信息更新自己clusterState中的master-slave，slots信息</li>
+<li>对FAILOVER_AUTH_REQUEST消息，检查并投票</li>
+<li>处理FAIL，FAILOVER_AUTH_ACK，UPDATE信息</li>
+</ul>
+<h3 id="定时任务（clusterCron）"><a href="#定时任务（clusterCron）" class="headerlink" title="定时任务（clusterCron）"></a>定时任务（clusterCron）</h3><ul>
+<li>对handshake节点建立Link，发送Ping或Meet</li>
+<li>向随机几点发送Ping</li>
+<li>如果是从查看是否需要做Failover</li>
+<li>统计并决定是否进行slave的迁移，来平衡不同master的slave数</li>
+<li>判断所有pfail报告数是否过半数</li>
+</ul>
+<h3 id="心跳数据"><a href="#心跳数据" class="headerlink" title="心跳数据"></a>心跳数据</h3><p>发送header信息：</p>
+<ul>
+<li>所负责的slots的信息</li>
+<li>主从信息</li>
+<li>ip port信息</li>
+<li>状态信息</li>
+</ul>
+<p>发送其他节点gossip信息：</p>
+<ul>
+<li>ping_sent,pong_received</li>
+<li>ip、port信息</li>
+<li>状态信息</li>
+</ul>
+<h2 id="分区原理"><a href="#分区原理" class="headerlink" title="分区原理"></a>分区原理</h2><h3 id="槽（slot）"><a href="#槽（slot）" class="headerlink" title="槽（slot）"></a>槽（slot）</h3><ul>
+<li>是一个虚拟的槽，总长度16384，为固定值，编号0~16383（用户可以配置）；</li>
+<li>每个master节点负责一部分槽；</li>
+<li>用户get/set时，先查找对应槽位，crc16(key)%16384，再查找对应节点，从而实现负载均衡。</li>
+</ul>
+<p>注：crc，循环冗余校验（Cyclic Redundancy Check）</p>
+<h3 id="位序列结构"><a href="#位序列结构" class="headerlink" title="位序列结构"></a>位序列结构</h3><ul>
+<li>每个master节点维护一个16384/8=2048个unsigned int长度的位序列，用于检查某个槽是否拥有；</li>
+<li>还维护一个槽到集群节点的映射，长度为16384的数组，数组下标为槽编号，数组的值为集群节点，用于快速查找槽所在的节点；</li>
+</ul>
+<h3 id="键哈希标签原理"><a href="#键哈希标签原理" class="headerlink" title="键哈希标签原理"></a>键哈希标签原理</h3><p>将一批数据放入同一个槽中，只需要按规则生成key，redis计算时只处理花括号内字符串：</p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//如：设置2个key为，abc&#123;userId&#125;def，ghi&#123;userId&#125;jkl</span></span><br><span class="line"></span><br><span class="line">unsigned <span class="built_in">int</span> keyHashSlot(<span class="built_in">char</span> *<span class="built_in">key</span>, <span class="built_in">int</span> keylen) &#123;</span><br><span class="line">    <span class="built_in">int</span> s, e; </span><br><span class="line">    <span class="keyword">for</span> (s = <span class="number">0</span>; s &lt; keylen; s++)</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">key</span>[s] == <span class="string">'&#123;'</span>) <span class="keyword">break</span>;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">if</span> (s == keylen) <span class="keyword">return</span> crc16(<span class="built_in">key</span>,keylen) &amp; <span class="number">0x3FFF</span>;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">for</span> (e = s+<span class="number">1</span>; e &lt; keylen; e++)</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">key</span>[e] == <span class="string">'&#125;'</span>) <span class="keyword">break</span>;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">if</span> (e == keylen || e == s+<span class="number">1</span>) <span class="keyword">return</span> crc16(<span class="built_in">key</span>,keylen) &amp; <span class="number">0x3FFF</span>;</span><br><span class="line">    <span class="keyword">return</span> crc16(<span class="built_in">key</span>+s+<span class="number">1</span>,e-s<span class="number">-1</span>) &amp; <span class="number">0x3FFF</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="请求重定向"><a href="#请求重定向" class="headerlink" title="请求重定向"></a>请求重定向</h3><h3 id="moved错误"><a href="#moved错误" class="headerlink" title="moved错误"></a>moved错误</h3><ol>
+<li>请求的key对应的槽不在该节点上，节点将查看自身所保存的哈希槽到节点的映射记录，返回一个moved错误；</li>
+<li>客户端需要再次向新节点重试。</li>
+</ol>
+<h3 id="ask错误"><a href="#ask错误" class="headerlink" title="ask错误"></a>ask错误</h3><ol>
+<li>请求的key对应的槽目前属于migrating状态，并且当前节点找不到这个key了，节点返回ask错误。</li>
+<li>ask会把对应槽的importing节点返回，让客户端重试；</li>
+<li>客户端重试，先发送asking命令，节点将为客户端设置一个一次性的标志（flag），使得客户端可以执行一次针对importing状态的槽的命令请求，然后再发送真正的命令请求；</li>
+<li>不必更新客户端所记录的槽至节点的映射。</li>
+</ol>
+<h2 id="数据迁移"><a href="#数据迁移" class="headerlink" title="数据迁移"></a>数据迁移</h2><h2 id="通信故障"><a href="#通信故障" class="headerlink" title="通信故障"></a>通信故障</h2><p>集群中每个节点都会定期向集群中的其他节点发送ping消息，以此交换各个节点状态信息，检查各个节点状态。</p>
+<p>节点状态：在线、怀疑下线、已下线。</p>
+<h3 id="主节点状态fail"><a href="#主节点状态fail" class="headerlink" title="主节点状态fail"></a>主节点状态fail</h3><p>集群里面，超过半数以上的主节点都将某主节点A报告为怀疑下线，那么A将被标记为已下线，并且标记他的节点处，会向集群广播他的fail消息。</p>
+<h4 id="多个从节点选主"><a href="#多个从节点选主" class="headerlink" title="多个从节点选主"></a>多个从节点选主</h4><p>主节点，选举方式进行</p>
+<h4 id="故障转移"><a href="#故障转移" class="headerlink" title="故障转移"></a>故障转移</h4><ol>
+<li>从下线主节点的所有从节点中选中一个从节点</li>
+<li>被选中的从节点执行SLAVEOF NO NOE命令，成为新的主节点</li>
+<li>新的主节点会撤销所有对已下线主节点的槽指派，并将这些槽全部指派给自己</li>
+<li>新的主节点对集群进行广播PONG消息，告知其他节点已经成为新的主节点</li>
+<li>新的主节点开始接收和处理槽相关的请求</li>
+</ol>
+<h3 id="集群状态fail"><a href="#集群状态fail" class="headerlink" title="集群状态fail"></a>集群状态fail</h3><ul>
+<li>集群中任意master节点挂掉，并且该master没有slave，集群计入fail状态；</li>
+<li>集群超过半数以上master挂掉，无论是否有slave，集群进入fail状态。 </li>
+</ul>
+
+        </div>
+
+        
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/04/17/服务器/redis集群/&title=《redis集群》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/04/17/服务器/redis集群/&title=《redis集群》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/04/17/服务器/redis集群/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《redis集群》 — Zfd's blog.&url=https://zfd.github.io/2018/04/17/服务器/redis集群/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/04/17/服务器/redis集群/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/04/19/笔记/解决问题记录/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">解决问题记录</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/04/13/数据结构/树/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">树</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <!-- todo hide
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    -->
+    <div class="bottom">
+        <p><span>zfd &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://zfd.github.io/2018/04/17/服务器/redis集群/&title=《redis集群》 — Zfd's blog.&pic=https://zfd.github.io/img/icon.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://zfd.github.io/2018/04/17/服务器/redis集群/&title=《redis集群》 — Zfd's blog.&source=my blog." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://zfd.github.io/2018/04/17/服务器/redis集群/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《redis集群》 — Zfd's blog.&url=https://zfd.github.io/2018/04/17/服务器/redis集群/&via=https://zfd.github.io" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://zfd.github.io/2018/04/17/服务器/redis集群/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKklEQVR42u3awW4jIRAEUP//T89KOSVaeVJF26s1PE7RKIZ5PrRpiscjHtfX+PvJ9+fXk3E/27MZHu8YGBgYH8u4bke+2D3p/nk+z9PPYmBgHMDIp7svu0k5br+O5AcAAwMD437qpEyvzY+BgYGxVnDbjWOyEcTAwMBIGMmLJmU3P7Zba3pf0ItjYGB8IKMNBv7l32/MNzAwMD6EcZUj/1S+7tqb/JgBAwNja0a7ybt/3bwdbdvjqBxjYGBszchJ+abtVYV4sWHGwMA4gNFOl1/8akt23k5jYGDszZgf1ufPXxVq/pLEYmBgbM1ol5lvHCchKAYGxjmMdts3PyZrg4fi6A0DA2NrxtoFiLxNbSPSloSBgbErI28156TRKeB9mcbAwNia0baOE3Z7xNZuKDEwMPZmrAHyYDI/LMvXerQDAwPjwxltuLh2YavtqvPii4GBcRpjLbBsN2r5/xfBAAYGxjGMd8SKa4FlXr4xMDBOYCTh5aRNbY/eFgEYGBibMtoGsg0pJ1coimsfGBgYBzDyKxRtfNheBVu8loGBgbE1Iy9zky3g5LitCCEwMDA2ZVzlyA/R1gLR9gAOAwPjBMak2E3iybUtYPuTgIGBsRMjbzLzBnWSUSyGBxgYGAcw8oO2+cJ1vW/jAQwMjIMZkw1cvsnLyz0GBgZGG3AWS05yjGeFGwMD4wBGexmivdrVfjX1ZzEwMLZmTIKBOW9yjfVl+QYGBsb/y/gD1o6TYVnl1X8AAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.7.2"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.7.2" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
