@@ -26,7 +26,7 @@
 <meta property="og:site_name" content="Zfd&#39;s blog.">
 <meta property="og:description" content="主要环境：nodeJs， git，hexo NodeJs安装：https://nodejs.org/en Git 安装：https://git-scm.com 生成公钥，供后面的github账号使用  123456789# 中括号为需要替换的内容 [你的用户名] =&amp;gt; zfdgit config --global user.name [你的用户名]git config --global us">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-22T09:48:48.000Z">
+<meta property="og:updated_time" content="2018-05-22T10:14:08.170Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="搭建博客">
 <meta name="twitter:description" content="主要环境：nodeJs， git，hexo NodeJs安装：https://nodejs.org/en Git 安装：https://git-scm.com 生成公钥，供后面的github账号使用  123456789# 中括号为需要替换的内容 [你的用户名] =&amp;gt; zfdgit config --global user.name [你的用户名]git config --global us">
@@ -199,8 +199,9 @@
 <p><a href="https://hexo.io/zh-cn/docs/writing.html" target="_blank" rel="noopener">https://hexo.io/zh-cn/docs/writing.html</a></p>
 <h3 id="一键部署、提交"><a href="#一键部署、提交" class="headerlink" title="一键部署、提交"></a>一键部署、提交</h3><p>设置git alias</p>
 <figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --<span class="keyword">global</span> <span class="keyword">alias</span>.blog '<span class="title">!hexo</span> g &amp;&amp; hexo d &amp;&amp; git pull &amp;&amp; git <span class="keyword">add</span> -A &amp;&amp; git commit -m <span class="string">"blog update"</span> &amp;&amp; git push origin master'</span><br></pre></td></tr></table></figure>
-<p>一键提交2个github项目<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">git blog</span></span><br></pre></td></tr></table></figure></p>
-<p>注：第一次提交先单独push一次，会有账号密码验证。</p>
+<p>一键提交2个github项目</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">git blog</span></span><br></pre></td></tr></table></figure>
+<p>注：第一次提交先单独push一次，因为会有账号密码验证。</p>
 <h2 id="最终成果"><a href="#最终成果" class="headerlink" title="最终成果"></a>最终成果</h2><p>blogServer project：<a href="https://github.com/zfd/blogServer" target="_blank" rel="noopener">https://github.com/zfd/blogServer</a><br>blog project：<a href="https://github.com/zfd/zfd.github.io" target="_blank" rel="noopener">https://github.com/zfd/zfd.github.io</a><br>blog url: <a href="https://zfd.github.io">https://zfd.github.io</a></p>
 
         </div>
